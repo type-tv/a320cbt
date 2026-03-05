@@ -1,3 +1,96 @@
+<div class="app-container">
+    <div id="user-info-panel" class="user-header" style="display: none;">
+        <span>👤 <b id="display-username">Misafir</b></span>
+        <span class="logout-link" onclick="logout()">Çıkış</span>
+    </div>
+    <div id="page-login" class="page active">
+        <div class="login-wrapper">
+            <h1 style="color: var(--primary); margin-bottom: 10px;">Sınav Sistemi</h1>
+            <p style="color: var(--secondary); margin-bottom: 30px;">Lütfen giriş yapın</p>
+            <input type="text" id="username-input" class="login-input" placeholder="Adınız">
+            <button class="btn btn-primary" style="width:100%" onclick="login()">Giriş Yap</button>
+        </div>
+    </div>
+    <div id="page-menu" class="page">
+        <h2 style="color: #1e293b; margin-bottom: 20px;">Dersler Menüsü</h2>
+        <div style="text-align: center; margin-bottom: 20px; font-weight: 600; color: #475569; background: #f1f5f9; padding: 10px; border-radius: 8px;">
+        🏆 Çözülen Soru: <span id="total-solved-display" style="color: var(--primary); font-size: 1.1rem; margin-right:5px;">0</span>
+        <span style="color:#cbd5e1">|</span>
+        ✅ Başarı Oranı: <span id="success-rate-display" style="color: var(--success); font-size: 1.1rem; margin-left:5px;">%0</span>
+        </div>
+        <div class="grid-menu">
+            <button class="btn" onclick="startQuiz('matematik')">📐 Matematik</button>
+            <button class="btn" onclick="startQuiz('fizik')">⚛️ Fizik</button>
+            <button class="btn" onclick="startQuiz('kimya')">🧪 Kimya</button>
+            <button class="btn" onclick="startQuiz('biyoloji')">🧬 Biyoloji</button>
+            <button class="btn" onclick="startQuiz('tarih')">📜 Tarih</button>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 20px;" onclick="startQuiz('mix')">🔀 Tüm Dersleri Karıştır</button>
+        <div class="stats-card">
+            <div class="stats-header">
+                <div class="stats-title">📊 HATA ANALİZİ</div>
+            </div>
+            <div class="stats-tabs">
+                <div class="stat-tab active" onclick="switchMistakeTab('all', this)">GENEL</div>
+                <div class="stat-tab" onclick="switchMistakeTab('matematik', this)">MATEMATİK</div>
+                <div class="stat-tab" onclick="switchMistakeTab('fizik', this)">FİZİK</div>
+                <div class="stat-tab" onclick="switchMistakeTab('kimya', this)">KİMYA</div>
+                <div class="stat-tab" onclick="switchMistakeTab('biyoloji', this)">BİYOLOJİ</div>
+                <div class="stat-tab" onclick="switchMistakeTab('tarih', this)">TARİH</div>
+            </div>
+            <div id="mistake-stats" style="display:flex; gap:10px; flex-wrap:wrap; min-height: 50px; align-items: center;">
+                <span style="color:#94a3b8; font-size:0.9rem;">Yükleniyor...</span>
+            </div>
+        </div>
+    </div>
+    <div id="page-quiz" class="page">
+        <div class="quiz-row-1">
+            <button onclick="endQuiz()" style="background:none; border:none; color:#94a3b8; font-weight:bold; cursor:pointer; font-size: 0.9rem;">✕ Çık</button>
+            <span id="quiz-title" style="font-weight: 800; color: var(--text-main); font-size: 1rem; text-align: center;">Test Adı</span>
+            <div class="quiz-user-badge">👤 <span id="display-username-quiz">Kullanıcı</span></div>
+        </div>
+        <div class="quiz-row-2">
+            <div class="progress-container"><div class="progress-fill" id="q-progress"></div></div>
+        </div>
+        <div class="quiz-row-3">
+            <span class="question-counter" id="q-counter">Soru 1/10</span>
+            <div style="display:flex; align-items:center;">
+                <span class="switch-label">Otomatik Geç</span>
+                <label class="switch">
+                    <input type="checkbox" id="auto-next" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        <div class="question-text" id="q-text">Yükleniyor...</div>
+        <div id="q-options"></div>
+        <div class="nav-buttons">
+            <button class="nav-btn btn-prev" id="btn-prev" onclick="prevQuestion()">← Önceki</button>
+            <button class="nav-btn btn-next" id="btn-next" onclick="nextQuestion()">Sonraki →</button>
+        </div>
+        <div class="fast-access-container">
+            <div class="fast-access-title">Hızlı Erişim</div>
+            <div class="access-grid" id="fast-access-grid"></div>
+        </div>
+    </div>
+    <div id="page-result" class="page">
+        <div style="margin: auto; text-align: center;">
+            <h3 id="res-test-title" style="margin-bottom: 20px; color: var(--primary-dark); font-weight: 800;">Test Adı</h3>
+            <div class="score-circle" id="result-circle">
+                <span id="res-score">%0</span>
+                <span class="score-label">BAŞARI</span>
+            </div>
+            <h2 id="res-msg">Sonuç</h2>
+            <p style="color:var(--secondary); margin-bottom:30px;">Sonuçlar analiz edildi.</p>
+            <div style="display:flex; flex-direction:column; gap:15px; max-width:400px; margin:0 auto;">
+                <button id="btn-retry-session" class="btn btn-danger" style="display:none;" onclick="retrySessionMistakes()">⚠️ Bu Testteki Yanlışları Çöz</button>
+                <button class="btn btn-primary" onclick="restartQuiz()">🔄 Aynı Testi Tekrarla</button>
+                <button class="btn" onclick="goBackToMenu()">🏠 Menüye Dön</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     let returnPageId = 'page-menu'; 
     let currentQuizTitle = ''; 
