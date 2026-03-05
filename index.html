@@ -1,1 +1,763 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sınav Sistemi - Örnek İskelet</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #64748b;
+            --success: #22c55e;
+            --danger: #dc2626;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #1e293b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .app-container {
+            background: var(--card);
+            width: 100%;
+            max-width: 900px;
+            min-height: 780px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* SAYFA GEÇİŞLERİ */
+        .page {
+            display: none;
+            flex-grow: 1;
+            padding: 30px;
+            flex-direction: column;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .page.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* LOGIN */
+        .login-wrapper { margin: auto; text-align: center; width: 100%; max-width: 400px; }
+        .login-input {
+            width: 100%; padding: 16px; border-radius: 8px; border: 2px solid var(--border);
+            background: #f8fafc; font-size: 1.1rem; margin-bottom: 20px; text-align: center;
+        }
+        .login-input:focus { border-color: var(--primary); outline: none; background: #fff; }
+
+        /* BUTONLAR */
+        .btn {
+            background: white; border: 2px solid var(--border); color: #334155;
+            padding: 14px; border-radius: 8px; font-size: 1rem; font-weight: 600;
+            cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+        .btn-primary { background: var(--primary); color: white; border-color: var(--primary); }
+        .btn-primary:hover { background: var(--primary-dark); color: white; border-color: var(--primary-dark); }
+        .btn-danger { background: #fee2e2; color: var(--danger); border-color: #fecaca; }
+        .btn-danger:hover { background: var(--danger); color: white; border-color: var(--danger); }
+
+        .grid-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+
+        /* HEADER & USER */
+        .user-header {
+            position: absolute; top: 20px; right: 20px; z-index: 10;
+            display: flex; align-items: center; gap: 15px;
+            font-size: 0.9rem; color: var(--secondary);
+            background: rgba(255,255,255,0.95); padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .logout-link { color: var(--danger); cursor: pointer; font-weight: 600; }
+
+        /* HATA ANALİZ KARTI */
+        .stats-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            margin-top: auto;
+        }
+        .stats-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
+        }
+        .stats-title { font-size: 0.95rem; color: var(--text-main); font-weight: 700; text-transform: uppercase; }
+        
+        .stats-tabs {
+            display: flex; gap: 5px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px;
+        }
+        .stat-tab {
+            padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+            border: 1px solid var(--border); background: white; color: var(--secondary); white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .stat-tab.active {
+            background: var(--primary); color: white; border-color: var(--primary);
+        }
+        .stat-tab:hover:not(.active) { background: #e2e8f0; }
+
+        /* QUIZ ALANI */
+        .quiz-row-1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .quiz-user-badge { font-size: 0.9rem; font-weight: 600; color: var(--primary); background: #eff6ff; padding: 5px 12px; border-radius: 15px; }
+
+        .quiz-row-2 { margin-bottom: 15px; }
+        .progress-container { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
+
+        .quiz-row-3 { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+        .question-counter { font-weight: 700; color: var(--secondary); font-size: 1rem; }
+
+        .question-text { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 25px; line-height: 1.6; }
+        
+        .option-card {
+            padding: 18px; border: 2px solid var(--border); border-radius: 10px;
+            cursor: pointer; transition: 0.2s; font-size: 1.05rem; margin-bottom: 10px;
+            background: white; color: #334155; position: relative;
+            display: flex; align-items: center;
+        }
+        .option-key-hint {
+            display: inline-block; width: 24px; height: 24px; line-height: 24px; text-align: center;
+            background: #e2e8f0; color: #64748b; border-radius: 4px; margin-right: 12px;
+            font-size: 0.8rem; font-weight: bold; flex-shrink: 0;
+        }
+
+        .option-card:hover { border-color: #94a3b8; background: #f1f5f9; }
+        .option-card.correct { background: #dcfce7; border-color: var(--success); color: #14532d; font-weight: 600; }
+        .option-card.incorrect { background: #fee2e2; border-color: var(--danger); color: #7f1d1d; }
+        .option-card.hint { border-color: var(--success); background: #f0fdf4; color: var(--success); font-weight: 600; }
+
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 25px; gap: 15px; }
+        .nav-btn { flex: 1; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; font-size: 1rem; }
+        .btn-prev { background: #e2e8f0; color: #475569; }
+        .btn-next { background: var(--primary-dark); color: white; }
+
+        .fast-access-container { margin-top: auto; border-top: 1px solid var(--border); padding-top: 20px; }
+        .fast-access-title { text-align: center; font-size: 0.85rem; color: var(--secondary); margin-bottom: 10px; }
+        .access-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(35px, 1fr)); gap: 6px; max-height: 150px; overflow-y: auto; padding: 5px; }
+        .access-btn {
+            height: 35px; display: flex; align-items: center; justify-content: center;
+            background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px;
+            font-size: 0.85rem; font-weight: 500; color: #64748b; cursor: pointer; transition: all 0.1s;
+        }
+        .access-btn:hover { background: #e2e8f0; }
+        .access-btn.current { border: 2px solid #0f172a; color: #0f172a; font-weight: 800; background: white; transform: scale(1.05); }
+        .access-btn.correct { background: var(--success); color: white; border-color: var(--success); }
+        .access-btn.incorrect { background: var(--danger); color: white; border-color: var(--danger); }
+
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { display:none; }
+        .slider { position: absolute; cursor: pointer; top:0; left:0; right:0; bottom:0; background-color: #cbd5e1; transition:.3s; border-radius: 34px; }
+        .slider:before { position: absolute; content:""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition:.3s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider:before { transform: translateX(20px); }
+        .switch-label { font-size: 0.9rem; color: var(--secondary); font-weight: 600; margin-right: 10px; }
+
+        .score-circle {
+            width: 150px; height: 150px; border-radius: 50%; background: transparent;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            margin: 0 auto 20px; font-size: 2.2rem; font-weight: 800; color: var(--text-main); border: 10px solid #e2e8f0;
+        }
+        .score-circle.good { border-color: var(--success); color: var(--success); }
+        .score-circle.bad { border-color: var(--danger); color: var(--danger); }
+        .score-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: #64748b; margin-top: 5px; }
+
+        .access-grid::-webkit-scrollbar { width: 6px; }
+        .access-grid::-webkit-scrollbar-track { background: #f1f1f1; }
+        .access-grid::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        /* MOBİL İÇİN ÖZEL AYARLAR */
+        @media screen and (max-width: 768px) {
+            body { padding: 0 !important; background-color: white; }
+            .app-container { width: 100%; max-width: 100%; border: none; border-radius: 0; box-shadow: none; padding: 10px 12px; min-height: 100vh; }
+            .page { padding: 0; }
+            .question-text { font-size: 0.9rem !important; line-height: 1.35; font-weight: 600; margin-bottom: 12px; color: #0f172a; }
+            .option-card { font-size: 0.85rem !important; padding: 8px 10px; margin-bottom: 6px; border-radius: 6px; min-height: auto; }
+            .option-key-hint { width: 18px; height: 18px; line-height: 18px; font-size: 0.7rem; margin-right: 6px; }
+            h1 { font-size: 1.2rem !important; margin-top: 5px; margin-bottom: 5px; }
+            h2 { font-size: 1rem !important; margin-bottom: 10px; }
+            .btn { font-size: 0.8rem; padding: 8px; height: auto; }
+            .grid-menu { gap: 8px; grid-template-columns: 1fr; }
+            .nav-buttons { margin-top: 15px; gap: 10px; }
+            .nav-btn { font-size: 0.8rem; padding: 8px; }
+            .stat-tab { padding: 4px 8px; font-size: 0.7rem; }
+            .user-header { position: relative; top: 0; right: 0; margin-bottom: 10px; justify-content: flex-end; border: none; background: none; box-shadow: none; padding: 0; }
+            #quiz-title { font-size: 0.85rem !important; font-weight: 700 !important; max-width: 50%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <div id="user-info-panel" class="user-header" style="display: none;">
+        <span>👤 <b id="display-username">Misafir</b></span>
+        <span class="logout-link" onclick="logout()">Çıkış</span>
+    </div>
+
+    <div id="page-login" class="page active">
+        <div class="login-wrapper">
+            <h1 style="color: var(--primary); margin-bottom: 10px;">Sınav Sistemi</h1>
+            <p style="color: var(--secondary); margin-bottom: 30px;">Lütfen giriş yapın</p>
+            <input type="text" id="username-input" class="login-input" placeholder="Adınız">
+            <button class="btn btn-primary" style="width:100%" onclick="login()">Giriş Yap</button>
+        </div>
+    </div>
+
+    <div id="page-menu" class="page">
+        <h2 style="color: #1e293b; margin-bottom: 20px;">Dersler Menüsü</h2>
+
+        <div style="text-align: center; margin-bottom: 20px; font-weight: 600; color: #475569; background: #f1f5f9; padding: 10px; border-radius: 8px;">
+        🏆 Çözülen Soru: <span id="total-solved-display" style="color: var(--primary); font-size: 1.1rem; margin-right:5px;">0</span>
+        <span style="color:#cbd5e1">|</span>
+        ✅ Başarı Oranı: <span id="success-rate-display" style="color: var(--success); font-size: 1.1rem; margin-left:5px;">%0</span>
+        </div>
+        
+        <div class="grid-menu">
+            <button class="btn" onclick="startQuiz('matematik')">📐 Matematik</button>
+            <button class="btn" onclick="startQuiz('fizik')">⚛️ Fizik</button>
+            <button class="btn" onclick="startQuiz('kimya')">🧪 Kimya</button>
+            <button class="btn" onclick="startQuiz('biyoloji')">🧬 Biyoloji</button>
+            <button class="btn" onclick="startQuiz('tarih')">📜 Tarih</button>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 20px;" onclick="startQuiz('mix')">🔀 Tüm Dersleri Karıştır</button>
+
+        <div class="stats-card">
+            <div class="stats-header">
+                <div class="stats-title">📊 HATA ANALİZİ</div>
+            </div>
+            
+            <div class="stats-tabs">
+                <div class="stat-tab active" onclick="switchMistakeTab('all', this)">GENEL</div>
+                <div class="stat-tab" onclick="switchMistakeTab('matematik', this)">MATEMATİK</div>
+                <div class="stat-tab" onclick="switchMistakeTab('fizik', this)">FİZİK</div>
+                <div class="stat-tab" onclick="switchMistakeTab('kimya', this)">KİMYA</div>
+                <div class="stat-tab" onclick="switchMistakeTab('biyoloji', this)">BİYOLOJİ</div>
+                <div class="stat-tab" onclick="switchMistakeTab('tarih', this)">TARİH</div>
+            </div>
+
+            <div id="mistake-stats" style="display:flex; gap:10px; flex-wrap:wrap; min-height: 50px; align-items: center;">
+                <span style="color:#94a3b8; font-size:0.9rem;">Yükleniyor...</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-quiz" class="page">
+        <div class="quiz-row-1">
+            <button onclick="endQuiz()" style="background:none; border:none; color:#94a3b8; font-weight:bold; cursor:pointer; font-size: 0.9rem;">✕ Çık</button>
+            <span id="quiz-title" style="font-weight: 800; color: var(--text-main); font-size: 1rem; text-align: center;">Test Adı</span>
+            <div class="quiz-user-badge">👤 <span id="display-username-quiz">Kullanıcı</span></div>
+        </div>
+        <div class="quiz-row-2">
+            <div class="progress-container"><div class="progress-fill" id="q-progress"></div></div>
+        </div>
+        <div class="quiz-row-3">
+            <span class="question-counter" id="q-counter">Soru 1/10</span>
+            <div style="display:flex; align-items:center;">
+                <span class="switch-label">Otomatik Geç</span>
+                <label class="switch">
+                    <input type="checkbox" id="auto-next" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question-text" id="q-text">Yükleniyor...</div>
+        <div id="q-options"></div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn btn-prev" id="btn-prev" onclick="prevQuestion()">← Önceki</button>
+            <button class="nav-btn btn-next" id="btn-next" onclick="nextQuestion()">Sonraki →</button>
+        </div>
+
+        <div class="fast-access-container">
+            <div class="fast-access-title">Hızlı Erişim</div>
+            <div class="access-grid" id="fast-access-grid"></div>
+        </div>
+    </div>
+
+    <div id="page-result" class="page">
+        <div style="margin: auto; text-align: center;">
+            <h3 id="res-test-title" style="margin-bottom: 20px; color: var(--primary-dark); font-weight: 800;">Test Adı</h3>
+            <div class="score-circle" id="result-circle">
+                <span id="res-score">%0</span>
+                <span class="score-label">BAŞARI</span>
+            </div>
+            <h2 id="res-msg">Sonuç</h2>
+            <p style="color:var(--secondary); margin-bottom:30px;">Sonuçlar analiz edildi.</p>
+            <div style="display:flex; flex-direction:column; gap:15px; max-width:400px; margin:0 auto;">
+                <button id="btn-retry-session" class="btn btn-danger" style="display:none;" onclick="retrySessionMistakes()">⚠️ Bu Testteki Yanlışları Çöz</button>
+                <button class="btn btn-primary" onclick="restartQuiz()">🔄 Aynı Testi Tekrarla</button>
+                <button class="btn" onclick="goBackToMenu()">🏠 Menüye Dön</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let returnPageId = 'page-menu'; 
+    let currentQuizTitle = ''; 
+    
+    // --- ÖRNEK VERİ HAVUZU (5 Ders) ---
+    const courseData = {
+        matematik: [
+            { q: "5 + 7 işleminin sonucu kaçtır?", options: ["10", "11", "12", "13"], answer: "12" },
+            { q: "Bir üçgenin iç açıları toplamı kaç derecedir?", options: ["90", "180", "360", "270"], answer: "180" },
+            { q: "8 x 8 kaçtır?", options: ["56", "64", "72", "81"], answer: "64" }
+        ],
+        fizik: [
+            { q: "Hareket yasalarını formülize eden ünlü bilim insanı kimdir?", options: ["Albert Einstein", "Isaac Newton", "Nikola Tesla", "Galileo Galilei"], answer: "Isaac Newton" },
+            { q: "Suyun deniz seviyesinde kaynama noktası kaç santigrat derecedir?", options: ["50", "90", "100", "120"], answer: "100" },
+            { q: "Elektrik akımının birimi nedir?", options: ["Volt", "Joule", "Amper", "Watt"], answer: "Amper" }
+        ],
+        kimya: [
+            { q: "Su molekülünün kimyasal formülü nedir?", options: ["CO2", "NaCl", "H2O", "O2"], answer: "H2O" },
+            { q: "Periyodik tablonun ilk elementi hangisidir?", options: ["Helyum", "Oksijen", "Karbon", "Hidrojen"], answer: "Hidrojen" },
+            { q: "Oda koşullarında sıvı halde bulunan tek metal hangisidir?", options: ["Demir", "Cıva", "Altın", "Bakır"], answer: "Cıva" }
+        ],
+        biyoloji: [
+            { q: "Hücrenin enerji santrali olarak bilinen organel hangisidir?", options: ["Çekirdek", "Ribozom", "Mitokondri", "Koful"], answer: "Mitokondri" },
+            { q: "Sağlıklı bir insanda kaç adet kromozom bulunur?", options: ["23", "44", "46", "48"], answer: "46" },
+            { q: "DNA'nın açılımı nedir?", options: ["Deoksiribo Nükleik Asit", "Dinamik Nöron Ağı", "Direkt Nükleer Alan", "Diyabetik Nörolojik Asit"], answer: "Deoksiribo Nükleik Asit" }
+        ],
+        tarih: [
+            { q: "Türkiye Cumhuriyeti hangi yıl ilan edilmiştir?", options: ["1919", "1920", "1923", "1925"], answer: "1923" },
+            { q: "İstanbul hangi padişah döneminde fethedilmiştir?", options: ["Yavuz Sultan Selim", "Fatih Sultan Mehmet", "Kanuni Sultan Süleyman", "II. Abdülhamit"], answer: "Fatih Sultan Mehmet" },
+            { q: "Fransız İhtilali hangi yıl gerçekleşmiştir?", options: ["1453", "1789", "1881", "1914"], answer: "1789" }
+        ]
+    };
+
+    // --- SİSTEM MANTIĞI ---
+    let currentUser = null;
+    let currentPool = [];
+    let currentIndex = 0;
+    let userAnswers = []; 
+    let currentTab = 'all';
+
+    window.onload = function() {
+        const savedUser = localStorage.getItem('sinav_user_v1');
+        if (savedUser) {
+            currentUser = savedUser;
+            updateUserInfo();
+            showPage('page-menu');
+            renderMistakeMenu();
+        } else {
+            showPage('page-login');
+        }
+
+        document.getElementById("username-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") login();
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (!document.getElementById('page-quiz').classList.contains('active')) return;
+            if (event.key === "ArrowLeft") prevQuestion();
+            if (event.key === "ArrowRight") {
+                if (currentIndex < currentPool.length - 1) nextQuestion();
+            }
+            const keyMap = { '1': 0, '2': 1, '3': 2, '4': 3, '5': 4 };
+            if (keyMap.hasOwnProperty(event.key)) {
+                const index = keyMap[event.key];
+                const options = document.querySelectorAll('.option-card');
+                if (options[index]) options[index].click();
+            }
+        });
+    };
+
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        
+        const infoPanel = document.getElementById('user-info-panel');
+        if (id === 'page-menu' || id === 'page-result') {
+            infoPanel.style.display = 'flex';
+        } else {
+            infoPanel.style.display = 'none';
+        }
+
+        if(id === 'page-menu') {
+            renderMistakeMenu(); 
+            
+            let db = getDB();
+            let totalAttempts = 0;
+            let totalCorrect = 0;
+
+            if (db[currentUser] && db[currentUser].stats) {
+                Object.values(db[currentUser].stats).forEach(stat => {
+                    totalAttempts += stat.total;
+                    totalCorrect += stat.correct;
+                });
+                db[currentUser].totalSolved = totalAttempts;
+                saveDB(db);
+            }
+            
+            let successRate = 0;
+            if (totalAttempts > 0) {
+                successRate = Math.round((totalCorrect / totalAttempts) * 100);
+            }
+
+            const totalEl = document.getElementById('total-solved-display');
+            const rateEl = document.getElementById('success-rate-display');
+            
+            if(totalEl) totalEl.textContent = totalAttempts;
+            if(rateEl) rateEl.textContent = `%${successRate}`;
+        }
+    }
+
+    function login() {
+        const val = document.getElementById('username-input').value.trim();
+        if(!val) return alert("Lütfen adınızı giriniz.");
+        currentUser = val;
+        localStorage.setItem('sinav_user_v1', val);
+        updateUserInfo();
+        showPage('page-menu');
+    }
+
+    function logout() {
+        if(confirm("Çıkış yapılsın mı?")) {
+            localStorage.removeItem('sinav_user_v1');
+            currentUser = null;
+            showPage('page-login');
+        }
+    }
+
+    function getDB() { return JSON.parse(localStorage.getItem('sinav_db_v1') || '{}'); }
+    function saveDB(data) { localStorage.setItem('sinav_db_v1', JSON.stringify(data)); }
+
+    function findQuestionCategory(qText) {
+        for (let category in courseData) {
+            if (courseData[category].some(x => x.q === qText)) return category;
+        }
+        return 'diger';
+    }
+
+    function updateStats(question, isCorrect) {
+        let db = getDB();
+        if(!db[currentUser]) db[currentUser] = { stats: {}, totalSolved: 0 };
+        if (typeof db[currentUser].totalSolved === 'undefined') db[currentUser].totalSolved = 0;
+        
+        const key = question.q;
+        if(!db[currentUser].stats[key]) {
+            const cat = findQuestionCategory(key);
+            db[currentUser].stats[key] = { total: 0, correct: 0, wrong: 0, qObj: question, category: cat };
+        }
+        
+        let stat = db[currentUser].stats[key];
+        stat.total++;
+        if(isCorrect) stat.correct++; else stat.wrong++;
+        stat.qObj = question;
+        db[currentUser].totalSolved++; 
+
+        saveDB(db);
+    }
+
+    function switchMistakeTab(tabName, btn) {
+        currentTab = tabName;
+        document.querySelectorAll('.stat-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderMistakeMenu();
+    }
+
+    function renderMistakeMenu() {
+        let db = getDB();
+        let stats = db[currentUser] ? db[currentUser].stats : {};
+        let critical = [], warning = [], info = [];
+
+        Object.values(stats).forEach(item => {
+            if (currentTab !== 'all' && item.category !== currentTab) return;
+
+            if(item.wrong > 0) {
+                let rate = (item.correct / item.total) * 100;
+                if(rate < 50) critical.push(item.qObj);
+                else if(rate < 80) warning.push(item.qObj);
+                else info.push(item.qObj);
+            }
+        });
+
+        const container = document.getElementById('mistake-stats');
+        container.innerHTML = '';
+
+        if(critical.length > 0) container.innerHTML += `<button class="btn btn-danger" onclick="startMistakeQuiz('critical')">🔴 Kritik (${critical.length})</button>`;
+        if(warning.length > 0) container.innerHTML += `<button class="btn" style="color:#b45309; border-color:#fcd34d; background:#fffbeb;" onclick="startMistakeQuiz('warning')">🟠 Sık Hata (${warning.length})</button>`;
+        if(info.length > 0) container.innerHTML += `<button class="btn" style="color:#1e40af; border-color:#bfdbfe; background:#eff6ff;" onclick="startMistakeQuiz('info')">🔵 Nadir (${info.length})</button>`;
+        
+        if(critical.length===0 && warning.length===0 && info.length===0) container.innerHTML = '<span style="color:#94a3b8;">Bu kategoride henüz hata kaydı yok.</span>';
+    }
+
+    function startQuiz(type) {
+        returnPageId = 'page-menu';
+        let titleText = "";
+        let sourceData = [];
+
+        if (type === 'mix') {
+            titleText = "🔀 Karışık Test";
+            for (let key in courseData) {
+                sourceData.push(...courseData[key]);
+            }
+        } else if (courseData[type]) {
+            titleText = "📚 " + type.charAt(0).toUpperCase() + type.slice(1) + " Testi";
+            sourceData = courseData[type];
+        }
+
+        document.getElementById('quiz-title').textContent = titleText;
+        currentQuizTitle = titleText;
+
+        if (!sourceData || sourceData.length === 0) return alert("Soru bulunamadı.");
+        
+        currentPool = sourceData.map(q => {
+            let newQ = { ...q };
+            newQ.options = [...q.options].sort(() => Math.random() - 0.5);
+            return newQ;
+        });
+
+        currentPool.sort(() => Math.random() - 0.5);
+        initQuizUI();
+    }
+
+    function startMistakeQuiz(cat) {
+        returnPageId = 'page-menu';
+        let titleText = "";
+        if (cat === 'critical') titleText = "🔴 Kritik Hatalar";
+        else if (cat === 'warning') titleText = "🟠 Sık Yapılan Hatalar";
+        else if (cat === 'info') titleText = "🔵 Nadir Hatalar";
+        
+        document.getElementById('quiz-title').textContent = titleText;
+        currentQuizTitle = titleText;
+
+        let db = getDB();
+        let stats = db[currentUser] ? db[currentUser].stats : {}; 
+        let pool = [];
+        
+        if (stats) {
+            Object.values(stats).forEach(item => {
+                if (currentTab !== 'all' && item.category !== currentTab) return;
+
+                if(item.wrong > 0) {
+                    let rate = (item.correct / item.total) * 100;
+                    if(cat === 'critical' && rate < 50) pool.push(item.qObj);
+                    if(cat === 'warning' && rate >= 50 && rate < 80) pool.push(item.qObj);
+                    if(cat === 'info' && rate >= 80) pool.push(item.qObj);
+                }
+            });
+        }
+        
+        if(pool.length === 0) return alert("Bu kategoride soru yok.");
+
+        currentPool = pool.map(q => {
+            let newQ = { ...q };
+            newQ.options = [...q.options].sort(() => Math.random() - 0.5);
+            return newQ;
+        });
+
+        currentPool.sort(() => Math.random() - 0.5);
+        initQuizUI();
+    }
+
+    function initQuizUI() {
+        currentIndex = 0;
+        userAnswers = new Array(currentPool.length).fill(null);
+        showPage('page-quiz');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        const q = currentPool[currentIndex];
+        
+        document.getElementById('q-text').innerHTML = `${currentIndex+1}. ${q.q}`;
+        document.getElementById('q-counter').textContent = `Soru ${currentIndex + 1} / ${currentPool.length}`;
+        document.getElementById('q-progress').style.width = `${((currentIndex+1)/currentPool.length)*100}%`;
+
+        const optsDiv = document.getElementById('q-options');
+        optsDiv.innerHTML = '';
+
+        q.options.forEach((opt, idx) => {
+            const btn = document.createElement('div');
+            btn.className = 'option-card';
+            const letter = String.fromCharCode(65 + idx); 
+            btn.innerHTML = `<span class="option-key-hint">${letter}</span> ${opt}`;
+            
+            btn.onclick = () => handleAnswer(opt, btn);
+            optsDiv.appendChild(btn);
+        });
+
+        if(userAnswers[currentIndex]) restoreState();
+        
+        document.getElementById('btn-prev').disabled = (currentIndex === 0);
+        document.getElementById('btn-next').textContent = (currentIndex === currentPool.length - 1) ? 'Bitir' : 'Sonraki →';
+        
+        renderFastAccess();
+    }
+
+    function handleAnswer(selected, btn) {
+        if(userAnswers[currentIndex]) return;
+
+        const q = currentPool[currentIndex];
+        const isCorrect = (selected === q.answer);
+        
+        userAnswers[currentIndex] = { selected, isCorrect, qObj: q };
+        
+        updateStats(q, isCorrect);
+        applyFeedback();
+        renderFastAccess();
+
+        const autoNext = document.getElementById('auto-next').checked;
+        if(isCorrect && autoNext) {
+            const allOpts = document.querySelectorAll('.option-card');
+            allOpts.forEach(o => o.style.pointerEvents = 'none');
+            
+            if (currentIndex < currentPool.length - 1) {
+                setTimeout(() => {
+                    nextQuestion();
+                }, 400); 
+            }
+        }
+    }
+
+    function applyFeedback() {
+        const ans = userAnswers[currentIndex];
+        if(!ans) return;
+        
+        const q = currentPool[currentIndex];
+        const opts = document.querySelectorAll('.option-card');
+        
+        opts.forEach(btn => {
+            btn.style.pointerEvents = 'none';
+            const btnText = btn.textContent.substring(2).trim();
+            
+            if(btnText === q.answer) {
+                btn.classList.add(ans.isCorrect ? 'correct' : 'hint');
+            }
+            if(btnText === ans.selected && !ans.isCorrect) {
+                btn.classList.add('incorrect');
+            }
+        });
+    }
+
+    function restoreState() { applyFeedback(); }
+
+    function renderFastAccess() {
+        const grid = document.getElementById('fast-access-grid');
+        grid.innerHTML = '';
+        
+        currentPool.forEach((_, i) => {
+            const btn = document.createElement('div');
+            btn.className = 'access-btn';
+            btn.textContent = i + 1;
+            
+            if (i === currentIndex) btn.classList.add('current');
+            
+            if (userAnswers[i]) {
+                if (userAnswers[i].isCorrect) btn.classList.add('correct');
+                else btn.classList.add('incorrect');
+            }
+            
+            btn.onclick = () => {
+                currentIndex = i;
+                loadQuestion();
+            };
+            grid.appendChild(btn);
+        });
+    }
+
+    function nextQuestion() {
+        if(currentIndex < currentPool.length - 1) {
+            currentIndex++;
+            loadQuestion();
+        } else {
+            finishQuiz();
+        }
+    }
+
+    function prevQuestion() {
+        if(currentIndex > 0) {
+            currentIndex--;
+            loadQuestion();
+        }
+    }
+
+    function endQuiz() {
+        if(confirm("Testi bitirmek istiyor musunuz?")) {
+            showPage(returnPageId);
+        }
+    }
+
+    function finishQuiz() {
+        const correct = userAnswers.filter(a => a && a.isCorrect).length;
+        const score = Math.round((correct / currentPool.length) * 100);
+        
+        document.getElementById('res-score').textContent = `%${score}`;
+        
+        const circle = document.getElementById('result-circle');
+        circle.className = 'score-circle'; 
+        if(score >= 75) circle.classList.add('good');
+        else circle.classList.add('bad');
+
+        const msg = document.getElementById('res-msg');
+        if(score >= 90) msg.textContent = "Mükemmel! 🚀";
+        else if(score >= 75) msg.textContent = "Tebrikler, Geçtiniz! 👍";
+        else msg.textContent = "Tekrar Gerekli. 🧐";
+        
+        document.getElementById('res-test-title').textContent = currentQuizTitle;
+
+        const wrongOnes = userAnswers.filter(a => a && !a.isCorrect);
+        const retryBtn = document.getElementById('btn-retry-session');
+        
+        if(wrongOnes.length > 0) {
+            retryBtn.style.display = 'block';
+            retryBtn.textContent = `⚠️ Bu Testteki ${wrongOnes.length} Yanlışı Çöz`;
+        } else {
+            retryBtn.style.display = 'none';
+        }
+
+        showPage('page-result');
+    }
+
+    function restartQuiz() {
+        currentPool = currentPool.map(q => {
+            let newQ = { ...q };
+            newQ.options = [...q.options].sort(() => Math.random() - 0.5);
+            return newQ;
+        });
+        currentPool.sort(() => Math.random() - 0.5);
+        initQuizUI();
+    }
+
+    function retrySessionMistakes() {
+        const wrongs = userAnswers.filter(a => a && !a.isCorrect).map(a => a.qObj);
+        
+        currentPool = wrongs.map(q => {
+            let newQ = { ...q };
+            newQ.options = [...q.options].sort(() => Math.random() - 0.5);
+            return newQ;
+        });
+
+        currentPool.sort(() => Math.random() - 0.5);
+        initQuizUI();
+    }
+
+    function goBackToMenu() {
+        showPage(returnPageId);
+    }
+</script>
+</body>
+</html>
