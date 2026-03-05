@@ -112,26 +112,40 @@
         <span style="color:#cbd5e1">|</span>
         ✅ Başarı Oranı: <span id="success-rate-display" style="color: var(--success); font-size: 1.1rem; margin-left:5px;">%0</span>
         </div>
-        <div class="grid-menu">
-            <button class="btn" onclick="startQuiz('matematik')">📐 Matematik</button>
-            <button class="btn" onclick="startQuiz('fizik')">⚛️ Fizik</button>
-            <button class="btn" onclick="startQuiz('kimya')">🧪 Kimya</button>
-            <button class="btn" onclick="startQuiz('biyoloji')">🧬 Biyoloji</button>
-            <button class="btn" onclick="startQuiz('tarih')">📜 Tarih</button>
+        <div class="grid-menu" id="dersler-menusu">
+            <button class="btn" onclick="startQuiz('apu')">⚙️ APU</button>
+            <button class="btn" onclick="startQuiz('communication')">📻 Communication</button>
+            <button class="btn" onclick="startQuiz('doors')">🚪 Doors</button>
+            <button class="btn" onclick="startQuiz('flight_controls')">✈️ Flight Controls</button>
+            <button class="btn" onclick="startQuiz('fire_protection')">🔥 Fire Protection</button>
+            <button class="btn" onclick="startQuiz('fuel')">⛽ Fuel</button>
+            <button class="btn" onclick="startQuiz('ice_and_rain')">❄️ Ice and Rain</button>
+            <button class="btn" onclick="startQuiz('indication')">🖥️ Indication / Recording</button>
+            <button class="btn" onclick="startQuiz('landing_gear')">🛬 Landing Gear</button>
+            <button class="btn" onclick="startQuiz('lights')">💡 Lights</button>
+            <button class="btn" onclick="startQuiz('oxygen')">🤿 Oxygen & Emergency</button>
         </div>
         <button class="btn btn-primary" style="width: 100%; margin-bottom: 20px;" onclick="startQuiz('mix')">🔀 Tüm Dersleri Karıştır</button>
         <div class="stats-card">
             <div class="stats-header">
                 <div class="stats-title">📊 HATA ANALİZİ</div>
             </div>
-            <div class="stats-tabs">
+            <div class="stats-tabs" id="hata-sekmeleri">
                 <div class="stat-tab active" onclick="switchMistakeTab('all', this)">GENEL</div>
-                <div class="stat-tab" onclick="switchMistakeTab('matematik', this)">MATEMATİK</div>
-                <div class="stat-tab" onclick="switchMistakeTab('fizik', this)">FİZİK</div>
-                <div class="stat-tab" onclick="switchMistakeTab('kimya', this)">KİMYA</div>
-                <div class="stat-tab" onclick="switchMistakeTab('biyoloji', this)">BİYOLOJİ</div>
-                <div class="stat-tab" onclick="switchMistakeTab('tarih', this)">TARİH</div>
+                <div class="stat-tab" onclick="switchMistakeTab('apu', this)">APU</div>
+                <div class="stat-tab" onclick="switchMistakeTab('communication', this)">COMM.</div>
+                <div class="stat-tab" onclick="switchMistakeTab('doors', this)">DOORS</div>
+                <div class="stat-tab" onclick="switchMistakeTab('flight_controls', this)">FLIGHT CONT.</div>
+                <div class="stat-tab" onclick="switchMistakeTab('fire_protection', this)">FIRE PROT.</div>
+                <div class="stat-tab" onclick="switchMistakeTab('fuel', this)">FUEL</div>
+                <div class="stat-tab" onclick="switchMistakeTab('ice_and_rain', this)">ICE & RAIN</div>
+                <div class="stat-tab" onclick="switchMistakeTab('indication', this)">INDICATION</div>
+                <div class="stat-tab" onclick="switchMistakeTab('landing_gear', this)">LANDING GEAR</div>
+                <div class="stat-tab" onclick="switchMistakeTab('lights', this)">LIGHTS</div>
+                <div class="stat-tab" onclick="switchMistakeTab('oxygen', this)">OXYGEN</div>
             </div>
+
+            
             <div id="mistake-stats" style="display:flex; gap:10px; flex-wrap:wrap; min-height: 50px; align-items: center;">
                 <span style="color:#94a3b8; font-size:0.9rem;">Yükleniyor...</span>
             </div>
@@ -189,33 +203,38 @@
     let returnPageId = 'page-menu'; 
     let currentQuizTitle = ''; 
     
-    // --- ÖRNEK VERİ HAVUZU (5 Ders) ---
+    // --- VERİ HAVUZU ---
     const courseData = {
-        matematik: [
-            { q: "5 + 7 işleminin sonucu kaçtır?", options: ["10", "11", "12", "13"], answer: "12" },
-            { q: "Bir üçgenin iç açıları toplamı kaç derecedir?", options: ["90", "180", "360", "270"], answer: "180" },
-            { q: "8 x 8 kaçtır?", options: ["56", "64", "72", "81"], answer: "64" }
+        apu: [
+            { q: "What are the APU manual shut down possibilities in the cockpit?", options: ["APU master switch and APU fire push button.", "APU master switch only.", "APU fire push button and APU shut off push button."], answer: "APU master switch and APU fire push button." },
+            { q: "When the APU is running, APU fuel pump:", options: ["Runs when tank pumps pressure is not sufficient.", "Runs all the time.", "Runs only in flight.", "Runs when the apu fuel pump is selected on."], answer: "Runs when tank pumps pressure is not sufficient." },
+            { q: "The normal APU rotation speed (N%) with or without bleed system demand and on ground or airbourne:", options: ["Always 100%", "Steady at 99%", "Steady at 101 %"], answer: "Always 100%" },
+            { q: "Apu master switch selected on:", options: ["On comes on blue. APU system is supplied and apu starts at 95 %, avail comes on.", "On comes on blue...APU system is supplied...APU starts as soon as the start push botton is pressed and intake flap opens."], answer: "On comes on blue...APU system is supplied...APU starts as soon as the start push botton is pressed and intake flap opens." },
+            { q: "APU bleed air is monitored by:", options: ["By ECB", "Not controlled.", "By APU bleed valve which operates as shut off valve ."], answer: "By ECB" },
+            { q: "APU N indication becomes red on ECAM SD, when :", options: ["A", "B", "C"], answer: "B" },
+            { q: "APU EGT indication becomes red on ECAM SD , when :", options: ["15 10 P runnin P runnin", "700 ºC-742 ºC, depending on the ambient temperature"], answer: "700 ºC-742 ºC, depending on the ambient temperature" },
+            { q: "On ground , APU provides:", options: ["Elec power + hydraulic power.", "Elec power + bleed air"], answer: "Elec power + bleed air" },
+            { q: "Air bleed extraction for wing anti-ice : REF: FCOM VOL.1 1.30.20 PAGE 1", options: ["Is permitted.", "Is not permitted."], answer: "Is not permitted." },
+            { q: "Can you start the APU using the A/C batteries:", options: ["YES", "NO"], answer: "YES" },
+            { q: "The APU fuel is suplied from the:", options: ["Left fuel feed line.", "Right fuel feed line."], answer: "Left fuel feed line." },
+            { q: "If air bleed was used, after a manual shut down sequence the APU:", options: ["Stops immediately.", "Keeps running for four minutes.", "Keeps running for a cooling period 120 sec ."], answer: "Keeps running for a cooling period 120 sec ." },
+            { q: "Avail light illuminates on start PB when :", options: ["External power is disconnected.", "APU N is above 99.5% or 2 sec after reaching 95%.", "APU electric power is used."], answer: "APU N is above 99.5% or 2 sec after reaching 95%." },
+            { q: "The APU has its own lubrication system:", options: ["YES", "NO"], answer: "YES" },
+            { q: "On ground ,the APU speed is determined in accordance with air bleed system demand by :", options: ["Electronic control box", "Air conditioning system (zone controller)", "Air intake system"], answer: "Electronic control box" },
+            { q: "Besides the master switch on the cockpit APU panel, APU shut down is possible by", options: ["Switching off the left fuel pumps.", "Pushing the APU fire push button.", "Pressing APU shut off push button on external interphone panel", "Either B or C"], answer: "Either B or C" },
+            { q: "When the APU master switch is released out, a normal APU shut down occurs: [fcom değişti]", options: ["After a time delay, in all cases.", "After a time delay if the APU bleed air was in use.", "Without time delay, in all cases."], answer: "After a time delay, in all cases." },
+            { q: "APU Master switch on, the :", options: ["APU starts.", "ECB is electrically supplied.", "Air intake flap closes."], answer: "ECB is electrically supplied." }
         ],
-        fizik: [
-            { q: "Hareket yasalarını formülize eden ünlü bilim insanı kimdir?", options: ["Albert Einstein", "Isaac Newton", "Nikola Tesla", "Galileo Galilei"], answer: "Isaac Newton" },
-            { q: "Suyun deniz seviyesinde kaynama noktası kaç santigrat derecedir?", options: ["50", "90", "100", "120"], answer: "100" },
-            { q: "Elektrik akımının birimi nedir?", options: ["Volt", "Joule", "Amper", "Watt"], answer: "Amper" }
-        ],
-        kimya: [
-            { q: "Su molekülünün kimyasal formülü nedir?", options: ["CO2", "NaCl", "H2O", "O2"], answer: "H2O" },
-            { q: "Periyodik tablonun ilk elementi hangisidir?", options: ["Helyum", "Oksijen", "Karbon", "Hidrojen"], answer: "Hidrojen" },
-            { q: "Oda koşullarında sıvı halde bulunan tek metal hangisidir?", options: ["Demir", "Cıva", "Altın", "Bakır"], answer: "Cıva" }
-        ],
-        biyoloji: [
-            { q: "Hücrenin enerji santrali olarak bilinen organel hangisidir?", options: ["Çekirdek", "Ribozom", "Mitokondri", "Koful"], answer: "Mitokondri" },
-            { q: "Sağlıklı bir insanda kaç adet kromozom bulunur?", options: ["23", "44", "46", "48"], answer: "46" },
-            { q: "DNA'nın açılımı nedir?", options: ["Deoksiribo Nükleik Asit", "Dinamik Nöron Ağı", "Direkt Nükleer Alan", "Diyabetik Nörolojik Asit"], answer: "Deoksiribo Nükleik Asit" }
-        ],
-        tarih: [
-            { q: "Türkiye Cumhuriyeti hangi yıl ilan edilmiştir?", options: ["1919", "1920", "1923", "1925"], answer: "1923" },
-            { q: "İstanbul hangi padişah döneminde fethedilmiştir?", options: ["Yavuz Sultan Selim", "Fatih Sultan Mehmet", "Kanuni Sultan Süleyman", "II. Abdülhamit"], answer: "Fatih Sultan Mehmet" },
-            { q: "Fransız İhtilali hangi yıl gerçekleşmiştir?", options: ["1453", "1789", "1881", "1914"], answer: "1789" }
-        ]
+        communication: [],
+        doors: [],
+        flight_controls: [],
+        fire_protection: [],
+        fuel: [],
+        ice_and_rain: [],
+        indication: [],
+        landing_gear: [],
+        lights: [],
+        oxygen: []
     };
 
     // --- SİSTEM MANTIĞI ---
