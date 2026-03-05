@@ -1,3 +1,97 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sınav Sistemi</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        :root { --primary: #2563eb; --primary-dark: #1e40af; --secondary: #64748b; --success: #22c55e; --danger: #dc2626; --bg: #f8fafc; --card: #ffffff; --border: #e2e8f0; --text-main: #1e293b; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .app-container { background: var(--card); width: 100%; max-width: 900px; min-height: 780px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        .page { display: none; flex-grow: 1; padding: 30px; flex-direction: column; animation: fadeIn 0.3s ease-out; }
+        .page.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .login-wrapper { margin: auto; text-align: center; width: 100%; max-width: 400px; }
+        .login-input { width: 100%; padding: 16px; border-radius: 8px; border: 2px solid var(--border); background: #f8fafc; font-size: 1.1rem; margin-bottom: 20px; text-align: center; }
+        .login-input:focus { border-color: var(--primary); outline: none; background: #fff; }
+        .btn { background: white; border: 2px solid var(--border); color: #334155; padding: 14px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+        .btn-primary { background: var(--primary); color: white; border-color: var(--primary); }
+        .btn-primary:hover { background: var(--primary-dark); color: white; border-color: var(--primary-dark); }
+        .btn-danger { background: #fee2e2; color: var(--danger); border-color: #fecaca; }
+        .btn-danger:hover { background: var(--danger); color: white; border-color: var(--danger); }
+        .grid-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .user-header { position: absolute; top: 20px; right: 20px; z-index: 10; display: flex; align-items: center; gap: 15px; font-size: 0.9rem; color: var(--secondary); background: rgba(255,255,255,0.95); padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .logout-link { color: var(--danger); cursor: pointer; font-weight: 600; }
+        .stats-card { background: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; margin-top: auto; }
+        .stats-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .stats-title { font-size: 0.95rem; color: var(--text-main); font-weight: 700; text-transform: uppercase; }
+        .stats-tabs { display: flex; gap: 5px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .stat-tab { padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: white; color: var(--secondary); white-space: nowrap; transition: all 0.2s; }
+        .stat-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .stat-tab:hover:not(.active) { background: #e2e8f0; }
+        .quiz-row-1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .quiz-user-badge { font-size: 0.9rem; font-weight: 600; color: var(--primary); background: #eff6ff; padding: 5px 12px; border-radius: 15px; }
+        .quiz-row-2 { margin-bottom: 15px; }
+        .progress-container { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
+        .quiz-row-3 { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+        .question-counter { font-weight: 700; color: var(--secondary); font-size: 1rem; }
+        .question-text { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 25px; line-height: 1.6; }
+        .option-card { padding: 18px; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; transition: 0.2s; font-size: 1.05rem; margin-bottom: 10px; background: white; color: #334155; position: relative; display: flex; align-items: center; }
+        .option-key-hint { display: inline-block; width: 24px; height: 24px; line-height: 24px; text-align: center; background: #e2e8f0; color: #64748b; border-radius: 4px; margin-right: 12px; font-size: 0.8rem; font-weight: bold; flex-shrink: 0; }
+        .option-card:hover { border-color: #94a3b8; background: #f1f5f9; }
+        .option-card.correct { background: #dcfce7; border-color: var(--success); color: #14532d; font-weight: 600; }
+        .option-card.incorrect { background: #fee2e2; border-color: var(--danger); color: #7f1d1d; }
+        .option-card.hint { border-color: var(--success); background: #f0fdf4; color: var(--success); font-weight: 600; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 25px; gap: 15px; }
+        .nav-btn { flex: 1; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; font-size: 1rem; }
+        .btn-prev { background: #e2e8f0; color: #475569; }
+        .btn-next { background: var(--primary-dark); color: white; }
+        .fast-access-container { margin-top: auto; border-top: 1px solid var(--border); padding-top: 20px; }
+        .fast-access-title { text-align: center; font-size: 0.85rem; color: var(--secondary); margin-bottom: 10px; }
+        .access-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(35px, 1fr)); gap: 6px; max-height: 150px; overflow-y: auto; padding: 5px; }
+        .access-btn { height: 35px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 500; color: #64748b; cursor: pointer; transition: all 0.1s; }
+        .access-btn:hover { background: #e2e8f0; }
+        .access-btn.current { border: 2px solid #0f172a; color: #0f172a; font-weight: 800; background: white; transform: scale(1.05); }
+        .access-btn.correct { background: var(--success); color: white; border-color: var(--success); }
+        .access-btn.incorrect { background: var(--danger); color: white; border-color: var(--danger); }
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { display:none; }
+        .slider { position: absolute; cursor: pointer; top:0; left:0; right:0; bottom:0; background-color: #cbd5e1; transition:.3s; border-radius: 34px; }
+        .slider:before { position: absolute; content:""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition:.3s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider:before { transform: translateX(20px); }
+        .switch-label { font-size: 0.9rem; color: var(--secondary); font-weight: 600; margin-right: 10px; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: transparent; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto 20px; font-size: 2.2rem; font-weight: 800; color: var(--text-main); border: 10px solid #e2e8f0; }
+        .score-circle.good { border-color: var(--success); color: var(--success); }
+        .score-circle.bad { border-color: var(--danger); color: var(--danger); }
+        .score-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: #64748b; margin-top: 5px; }
+        .access-grid::-webkit-scrollbar { width: 6px; }
+        .access-grid::-webkit-scrollbar-track { background: #f1f1f1; }
+        .access-grid::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        @media screen and (max-width: 768px) {
+            body { padding: 0 !important; background-color: white; }
+            .app-container { width: 100%; max-width: 100%; border: none; border-radius: 0; box-shadow: none; padding: 10px 12px; min-height: 100vh; }
+            .page { padding: 0; }
+            .question-text { font-size: 0.9rem !important; line-height: 1.35; font-weight: 600; margin-bottom: 12px; color: #0f172a; }
+            .option-card { font-size: 0.85rem !important; padding: 8px 10px; margin-bottom: 6px; border-radius: 6px; min-height: auto; }
+            .option-key-hint { width: 18px; height: 18px; line-height: 18px; font-size: 0.7rem; margin-right: 6px; }
+            h1 { font-size: 1.2rem !important; margin-top: 5px; margin-bottom: 5px; }
+            h2 { font-size: 1rem !important; margin-bottom: 10px; }
+            .btn { font-size: 0.8rem; padding: 8px; height: auto; }
+            .grid-menu { gap: 8px; grid-template-columns: 1fr; }
+            .nav-buttons { margin-top: 15px; gap: 10px; }
+            .nav-btn { font-size: 0.8rem; padding: 8px; }
+            .stat-tab { padding: 4px 8px; font-size: 0.7rem; }
+            .user-header { position: relative; top: 0; right: 0; margin-bottom: 10px; justify-content: flex-end; border: none; background: none; box-shadow: none; padding: 0; }
+            #quiz-title { font-size: 0.85rem !important; font-weight: 700 !important; max-width: 50%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        }
+    </style>
+</head>
+<body>
 <div class="app-container">
     <div id="user-info-panel" class="user-header" style="display: none;">
         <span>👤 <b id="display-username">Misafir</b></span>
@@ -552,3 +646,5 @@
         showPage(returnPageId);
     }
 </script>
+</body>
+</html>
