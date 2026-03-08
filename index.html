@@ -162,6 +162,7 @@
         </div>
         <div class="quiz-row-3">
             <span class="question-counter" id="q-counter">Soru 1/10</span>
+            <div style="font-weight: 600; color: var(--primary); font-size: 0.8rem; background: #eff6ff; padding: 2px 8px; border-radius: 6px; border: 1px solid #bfdbfe;">⏱️ <span id="quiz-timer">00:00</span></div>
             <div style="display:flex; align-items:center;">
                 <span class="switch-label">Otomatik Geç</span>
                 <label class="switch">
@@ -189,7 +190,8 @@
                 <span class="score-label">BAŞARI</span>
             </div>
             <h2 id="res-msg">Sonuç</h2>
-            <p style="color:var(--secondary); margin-bottom:30px;">Sonuçlar analiz edildi.</p>
+            <p style="color:var(--secondary); margin-bottom:5px;">Sonuçlar analiz edildi.</p>
+            <p style="color:#0f172a; font-weight:600; font-size: 0.85rem; margin-bottom:30px; background: #f8fafc; padding: 6px 10px; border-radius: 6px; display: inline-block; border: 1px solid var(--border);">⏱️ Tamamlama Süresi: <span id="res-time-display" style="color:var(--primary)">00:00</span></p>
             <div style="display:flex; flex-direction:column; gap:15px; max-width:400px; margin:0 auto;">
                 <button id="btn-retry-session" class="btn btn-danger" style="display:none;" onclick="retrySessionMistakes()">⚠️ Bu Testteki Yanlışları Çöz</button>
                 <button class="btn btn-primary" onclick="restartQuiz()">🔄 Aynı Testi Tekrarla</button>
@@ -771,6 +773,10 @@
     let userAnswers = []; 
     let currentTab = 'all';
 
+    // --- ZAMANLAYICI DEĞİŞKENLERİ ---
+    let quizStartTime = null;
+    let timerInterval = null;
+
     window.onload = function() {
         const savedUser = localStorage.getItem('sinav_user_v1');
         if (savedUser) {
@@ -1006,11 +1012,26 @@
         initQuizUI();
     }
 
+    function updateTimer() {
+        if (!quizStartTime) return;
+        let elapsed = Math.floor((Date.now() - quizStartTime) / 1000); // Milisaniyeyi saniyeye çevir
+        let m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+        let s = String(elapsed % 60).padStart(2, '0');
+        let timerEl = document.getElementById('quiz-timer');
+        if(timerEl) timerEl.textContent = `${m}:${s}`;
+    }
+
     function initQuizUI() {
         currentIndex = 0;
         userAnswers = new Array(currentPool.length).fill(null);
         showPage('page-quiz');
         loadQuestion();
+        
+        // Zamanlayıcıyı başlat
+        quizStartTime = Date.now(); // Teste başladığımız anki gerçek saati al
+        if (timerInterval) clearInterval(timerInterval);
+        updateTimer(); // Ekrana ilk saniyeyi (00:00) hemen yaz
+        timerInterval = setInterval(updateTimer, 1000);
     }
 
     function loadQuestion() {
@@ -1134,11 +1155,20 @@
 
     function endQuiz() {
         if(confirm("Testi bitirmek istiyor musunuz?")) {
+            if (timerInterval) clearInterval(timerInterval); // Çıkarken sayacı durdur
             showPage(returnPageId);
         }
     }
 
     function finishQuiz() {
+        // Test bitince zamanlayıcıyı durdur ve sonucu hesapla
+        if (timerInterval) clearInterval(timerInterval);
+        let elapsed = Math.floor((Date.now() - quizStartTime) / 1000);
+        let m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+        let s = String(elapsed % 60).padStart(2, '0');
+        let resTimeEl = document.getElementById('res-time-display');
+        if(resTimeEl) resTimeEl.textContent = `${m}:${s}`;
+
         const correct = userAnswers.filter(a => a && a.isCorrect).length;
         const score = Math.round((correct / currentPool.length) * 100);
         
