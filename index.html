@@ -105,50 +105,38 @@
             <button class="btn btn-primary" style="width:100%" onclick="login()">Giriş Yap</button>
         </div>
     </div>
-    <div id="page-menu" class="page">
-        <h2 style="color: #1e293b; margin-bottom: 20px;">Dersler</h2>
-        <div style="text-align: center; margin-bottom: 20px; font-weight: 600; color: #475569; background: #f1f5f9; padding: 10px; border-radius: 8px;">
-        🏆 Çözülen Soru: <span id="total-solved-display" style="color: var(--primary); font-size: 1.1rem; margin-right:5px;">0</span>
-        <span style="color:#cbd5e1">|</span>
-        ✅ Başarı Oranı: <span id="success-rate-display" style="color: var(--success); font-size: 1.1rem; margin-left:5px;">%0</span>
+    <div id="page-main-menu" class="page">
+        <h2 style="color: #1e293b; margin-bottom: 20px; text-align:center;">Sınav Seçimi</h2>
+        <div style="text-align: center; margin-bottom: 30px; font-weight: 600; color: #475569; background: #f1f5f9; padding: 15px; border-radius: 8px;">
+            🏆 Çözülen Soru: <span id="total-solved-display" style="color: var(--primary); font-size: 1.2rem; margin-right:10px;">0</span>
+            <span style="color:#cbd5e1">|</span>
+            ✅ Başarı Oranı: <span id="success-rate-display" style="color: var(--success); font-size: 1.2rem; margin-left:10px;">%0</span>
         </div>
-        <div class="grid-menu" id="dersler-menusu">
-            <button class="btn" onclick="startQuiz('apu')">⚙️ APU</button>
-            <button class="btn" onclick="startQuiz('communication')">📻 Communication</button>
-            <button class="btn" onclick="startQuiz('doors')">🚪 Doors</button>
-            <button class="btn" onclick="startQuiz('flight_controls')">✈️ Flight Controls</button>
-            <button class="btn" onclick="startQuiz('fire_protection')">🔥 Fire Protection</button>
-            <button class="btn" onclick="startQuiz('fuel')">⛽ Fuel</button>
-            <button class="btn" onclick="startQuiz('ice_and_rain')">❄️ Ice and Rain</button>
-            <button class="btn" onclick="startQuiz('indication')">🖥️ Indication / Recording</button>
-            <button class="btn" onclick="startQuiz('landing_gear')">🛬 Landing Gear</button>
-            <button class="btn" onclick="startQuiz('lights')">💡 Lights</button>
-            <button class="btn" onclick="startQuiz('oxygen')">🤿 Oxygen & Emergency</button>
-            <button class="btn" onclick="startQuiz('instruments')">🎛️ Instruments</button>
+        <div style="display:flex; flex-direction:column; gap:20px; max-width:400px; margin:0 auto; width:100%;">
+            <button class="btn btn-primary" style="font-size:1.2rem; padding:20px;" onclick="openExam('exam12')">📘 Exam I-II</button>
+            <button class="btn btn-primary" style="font-size:1.2rem; padding:20px; background:#0f766e; border-color:#0f766e;" onclick="openExam('exam3')">📗 Exam III</button>
+            <button class="btn btn-primary" style="font-size:1.2rem; padding:20px; background:#6366f1; border-color:#6366f1;" onclick="openExam('extra')">📙 Extra</button>
+        </div>
+    </div>
+
+    <div id="page-menu" class="page">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+            <button onclick="showPage('page-main-menu')" style="background:none; border:none; color:#64748b; font-weight:bold; cursor:pointer; font-size:1rem; padding:0;">← Geri</button>
+            <h2 id="exam-title" style="color: #1e293b; margin: 0;">Exam</h2>
+            <div style="width:50px;"></div>
         </div>
         
-        <button class="btn btn-primary" style="width: 100%; margin-bottom: 20px;" onclick="startQuiz('mix')">🔀 Tüm Dersleri Karıştır</button>
+        <div class="grid-menu" id="dersler-menusu">
+            </div>
+        
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 20px;" onclick="startQuiz('mix')">🔀 Bu Gruptaki Tüm Dersleri Karıştır</button>
         
         <div class="stats-card">
             <div class="stats-header">
                 <div class="stats-title">📊 HATA ANALİZİ</div>
             </div>
             <div class="stats-tabs" id="hata-sekmeleri">
-                <div class="stat-tab active" onclick="switchMistakeTab('all', this)">GENEL</div>
-                <div class="stat-tab" onclick="switchMistakeTab('apu', this)">APU</div>
-                <div class="stat-tab" onclick="switchMistakeTab('communication', this)">COMM.</div>
-                <div class="stat-tab" onclick="switchMistakeTab('doors', this)">DOORS</div>
-                <div class="stat-tab" onclick="switchMistakeTab('flight_controls', this)">FLIGHT CONT.</div>
-                <div class="stat-tab" onclick="switchMistakeTab('fire_protection', this)">FIRE PROT.</div>
-                <div class="stat-tab" onclick="switchMistakeTab('fuel', this)">FUEL</div>
-                <div class="stat-tab" onclick="switchMistakeTab('ice_and_rain', this)">ICE & RAIN</div>
-                <div class="stat-tab" onclick="switchMistakeTab('indication', this)">INDICATION</div>
-                <div class="stat-tab" onclick="switchMistakeTab('landing_gear', this)">LANDING GEAR</div>
-                <div class="stat-tab" onclick="switchMistakeTab('lights', this)">LIGHTS</div>
-                <div class="stat-tab" onclick="switchMistakeTab('oxygen', this)">OXYGEN</div>
-                <div class="stat-tab" onclick="switchMistakeTab('instruments', this)">INSTRUMENTS</div>
-            </div>
-
+                </div>
             <div id="mistake-stats" style="display:flex; gap:10px; flex-wrap:wrap; min-height: 50px; align-items: center;">
                 <span style="color:#94a3b8; font-size:0.9rem;">Yükleniyor...</span>
             </div>
@@ -207,6 +195,7 @@
 <script>
     let returnPageId = 'page-menu'; 
     let currentQuizTitle = ''; 
+    let currentExamCategory = 'exam12';
     
     // --- VERİ HAVUZU ---
     const courseData = {
@@ -809,7 +798,403 @@
             { q: "Please answer based on the given image:", img: "annexes/instruments/instruments_annex18.png", options: ["A", "B"], answer: "A" },
             { q: "Please answer based on the given image:", img: "annexes/instruments/instruments_annex19.png", options: ["A", "B", "C", "D"], answer: "A" },
             { q: "Please answer based on the given image:", img: "annexes/instruments/instruments_annex20.png", options: ["A", "B", "C", "D"], answer: "D" }
-        ]
+        ],
+        // EXAM III DERSLERİ
+        air_condition: [
+            { q: "When hot air \"fault\" light comes ON, on the air conditioning panel due to overheat :", options: ["The hot air press regulating valve closes and the trim air valves close.", "The hot air press regulating valve opens and the trim air valves close.", "The hot air press regulating valve closes and trim air valves open."], answer: "The hot air press regulating valve closes and the trim air valves close." },
+            { q: "During normal flight and with skin temp below threshold, the avonics ventilation system controls the temperature of the cooling air by :", options: ["Adding air from the cockpit.", "Passing air through a skin heat exchanger.", "Adding conditioned air to the flow.", "Extracting air from overboard."], answer: "Passing air through a skin heat exchanger." },
+            { q: "The ram air switch should be used :", options: ["At any time.", "Only when the diff press is less than 1 PSI.", "When the diff press is greater than 1 PSI.", "Only when outflow valve is fully closed."], answer: "Only when the diff press is less than 1 PSI." },
+            { q: "Pack flow control valve:", options: ["Pneumatically-operated and electrically-controlled.", "Electrically-operated and pneumatically-controlled", "Electrically operated and controlled."], answer: "Pneumatically-operated and electrically-controlled." },
+            { q: "What happens in case of failure of the secondary channel of the pack controllers ?", options: ["No effect on pack regulation, back up mode is lost.", "Pack is lost.", "No effect."], answer: "No effect on pack regulation, back up mode is lost." },
+            { q: "What happens in case of failure of the primary and secondary channels of the pack controllers ?", options: ["Pack outlet temperature is controlled by the ANTI-ICE valve", "The pack is closed."], answer: "Pack outlet temperature is controlled by the ANTI-ICE valve" },
+            { q: "What happens if the hot air press Reg valve fails open ?", options: ["Optimised regulation is lost.", "The temperature stays at the value selected when the failure occurred.", "No effect."], answer: "No effect." },
+            { q: "When bleed air is supplied from the APU (APU bleed valve open), the pack flow is automatically selected :", options: ["High or 120% of the normal flow", "Normal", "Low"], answer: "High or 120% of the normal flow" },
+            { q: "Each trim air valve optimizes the temperature by:", options: ["Adding hot air.", "Adding fresh air.", "Modulation of pack flow."], answer: "Adding hot air." },
+            { q: "The hot air pressure regulating valve :", options: ["Regulates the pressure of hot air trapped upstream of the packs.", "Is springloaded open in the absence of air.", "Opens automatically in case of duct overheat."], answer: "Regulates the pressure of hot air trapped upstream of the packs." },
+            { q: "The pack flow control valve is:", options: ["Pneumatically operated and electrically controlled.", "Electrically operated and pneumatically controlled.", "Opens automatically during engine starting."], answer: "Pneumatically operated and electrically controlled." },
+            { q: "The temperature selectors are located in :", options: ["The cockpit.", "The cabin.", "Both."], answer: "The cockpit." },
+            { q: "Pack flow may be selected from:", options: ["The cockpit.", "The cabin.", "Both."], answer: "The cockpit." },
+            { q: "For engine pressure demand, when the heating or cooling demand in one zone cannot be satisfied :", options: ["The minimum idle must be increased manually.", "The minimum idle is increased automatically by both EIUs.", "In any case, flight idle is sufficient."], answer: "The minimum idle is increased automatically by both EIUs." },
+            { q: "What is the max norm CAB ALT ?", options: ["8.000 FT", "9.550 + 350 FT", "14.000 FT"], answer: "8.000 FT" },
+            { q: "What is the max negative differential pressure for the cabin ?", options: ["0 PSI", "-1 PSI", "-2 PSI"], answer: "-1 PSI" },
+            { q: "Is it possible to simultaneously use packs and LP ground unit during long stops in hot airfied ?", options: ["Yes", "No", "Yes, if external temperature is > 50 C"], answer: "No" },
+            { q: "The Trim air valves are electrically-controlled by :", options: ["The air conditioning system controllers or the zone controller", "Pack controllers.", "Hot air pressure regulating valve."], answer: "The air conditioning system controllers or the zone controller" },
+            { q: "The mixing unit is connected to :", options: ["Packs, cabin air, emergency ram air inlet and LP ground connector.", "Packs, emergency ram air inlet and LP ground connector.", "Packs and cabin air."], answer: "Packs, cabin air, emergency ram air inlet and LP ground connector." },
+            { q: "Once set to \"ON\" the air conditioning packs operate :", options: ["Automatically and independently of each other.", "Manually and independently of each other.", "Automatically, pack 1 as master, pack 2 as slave."], answer: "Automatically and independently of each other." },
+            { q: "When the ram air push button is \"ON\": the The outflow valve opens about 50%, provided that it is under automatic control and ∆P is less than one psi.", options: ["true", "false"], answer: "true" },
+            { q: "In case of air conditioning system controller 1, both lanes failure:", options: ["The related pack is lost, and the hot air pressure regulating valve and associated trim air valves close.", "No effect, as the third lane takes over.", "The outlet temperature for pack 1 and 2 is fixed at 15ºC (69ºF )."], answer: "The related pack is lost, and the hot air pressure regulating valve and associated trim air valves close." },
+            { q: "Conditioned air is distributed to:", options: ["Cockpit , cargo bays and cabin.", "Cockpit , forward and AFT cabin.", "Cockpit , avionics bay , cabin."], answer: "Cockpit , forward and AFT cabin." },
+            { q: "The cabin zone temperature sensors are ventilated by the air extracted by the lavatory and gallery fans:", options: ["True", "False"], answer: "True" },
+            { q: "Temperature regulation is controlled by:", options: ["Mixer unit.", "Air cycle machines.", "Air conditioning system controllers."], answer: "Air conditioning system controllers." },
+            { q: "If air conditioning system controller 2, single lane failure occurs:", options: ["The related pack is lost, and the hot air pressure regulating valve and associated trim air valves close", "Each controller is comprised of three lanes.", "No effect, as the second lane takes over."], answer: "No effect, as the second lane takes over." },
+            { q: "The ram air inlet flaps position during take off and landing:", options: ["Fully open to increase airflow with the low airspeed.", "Closed to avoid ingestion of foreign matter.", "Partially open."], answer: "Closed to avoid ingestion of foreign matter." },
+            { q: "When the ram air push button is set to on, the outflow valve:", options: ["Closes.", "Opens each time.", "Opens partially about 50% if ∆P is less than 1 PSI", "Opens when diff press is greater than 1 PSI."], answer: "Opens partially about 50% if ∆P is less than 1 PSI" },
+            { q: "The pack flow control valve closes automatically in case of:", options: ["Pack overheat, engine fire push button released, engine start, ditching push button pressed.", "Bleed valve failure, pack outlet pressure increase", "Both A + B."], answer: "Pack overheat, engine fire push button released, engine start, ditching push button pressed." },
+            { q: "In case of trim air system fault, the secondary channel of the zone controller regulates the zone temperature at:", options: ["14 ºC (57 ºF).", "24 ºC (75 ºF).", "15 ºC (59 ºF)."], answer: "24 ºC (75 ºF)." },
+            { q: "In case of total zone controller failure:", options: ["Hot air and trim valves open and packs deliver air at fixed temperature -15 ºC ( 59 ºF ) pack 1, 10 ºC (50 ºF ) pack 2.", "Hot air and trim valves close and packs deliver air at fixed temperature -15 ºC ( 59 ºF ) pack 1, 10 ºC (50 ºF ) pack 2.", "Hot air and trim valves close and packs deliver air at fixed temperature -20 ºC ( 68 ºF ) pack 1, 10 ºC (50 ºF ) pack 2."], answer: "Hot air and trim valves close and packs deliver air at fixed temperature -20 ºC ( 68 ºF ) pack 1, 10 ºC (50 ºF ) pack 2." },
+            { q: "During landing run, the ram air inlet flaps open when speed is less than:", options: ["100 KTS (after 30 seconds delay ).", "70 KTS and no delay", "70 KTS (after 20 seconds delay )"], answer: "70 KTS (after 20 seconds delay )" },
+            { q: "When the APU supplying the packs, the pack controller sends a demand signal to increase air flow when a zone temperature cannot be satisfied:", options: ["To the pack ram air inlet flap.", "To the APU ECB.", "Pack flow control valve."], answer: "To the APU ECB." },
+            { q: "In case of zone controller primary and secondary channels failure which temperature is delivered by each pack?", options: ["25 ºC ( 59 ºF ) both.", "20 ºC ( 68 ºF ) pack 1 - 10 ºC ( 50 ºF ) pack 2.", "24 ºC ( 75 ºF ) pack 1 - 15 ºC ( 59 ºF ) pack 2.", "15 ºC ( 59 ºF ) both."], answer: "20 ºC ( 68 ºF ) pack 1 - 10 ºC ( 50 ºF ) pack 2." },
+            { q: "When the diching switch is set to on a closure signal is sent to on a closure signal is sent to?", options: ["Outflow valve and emergency ram air inlet", "Avionics ventilation inlet and extract valves.", "The pack flow control valves.", "All the above."], answer: "All the above." },
+            { q: "In normal operation, pressurization is:", options: ["Fully automatic.", "Manually controlled", "Both A and B"], answer: "Fully automatic." },
+            { q: "In flight, with pressure controller 1 in use, If it fails:", options: ["You have to use the manual control.", "Automatic transfer to controller 2.", "You have to manually select controller 2.", "you have to set the landing elevation."], answer: "Automatic transfer to controller 2." },
+            { q: "The outfow valve is powered by:", options: ["One of two electric motors.", "One of three electric motors.", "Three mechanically linked electric motors."], answer: "One of three electric motors." },
+            { q: "During ground function operation, the outflow valves is:", options: ["Fully open.", "Fully closed.", "Positioned according to FMGS demands"], answer: "Fully open." },
+            { q: "To see the position of the outflow valve it is necessary to call ecam:", options: ["COND page", "BLEED page", "PRESS page"], answer: "PRESS page" },
+            { q: "Two identical, independent, automatic digital pressurization controllers are used for system control:", options: ["One controller active, one in standby.", "Both controllers monitored by FMGS.", "Contollers N º1 for climb phase and controller N º2 in cruise and descent."], answer: "One controller active, one in standby." },
+            { q: "Which controller provides outflow valve position information for ecam indication in manual mode:", options: ["Both.", "The backup section of N º1 controller.", "The backup section of N º2 controller."], answer: "The backup section of N º1 controller." },
+            { q: "When the ram air push button set to ON, the outflow valve will partially open when:", options: ["Differential pressure > 1.5 PSI", "Differential pressure < 3 PSI", "Differential pressure < 1 PSI"], answer: "Differential pressure < 1 PSI" },
+            { q: "The purpose of the safety valves is to avoid:", options: ["Excessive positive differential pressure.", "Excessive negative differential pressure.", "Both A or B above."], answer: "Both A or B above." },
+            { q: "The safety valves are operated:", options: ["Electrically", "Hydraulically", "Pneumatically"], answer: "Pneumatically" },
+            { q: "When landing elevation is set to auto, the landing elevation is sent to the controller from :", options: ["FMGS", "FCU", "ADIRS"], answer: "FMGS" },
+            { q: "When the MODE SEL is set to manual , the outflow valve is controlled by signals sent via controller 1 or 2.", options: ["True.", "False."], answer: "False." },
+            { q: "On ECAM cab press page, the outflow valve indicator changes to amber if :", options: ["Fully closed.", "The valve opens more than 95 % during flight.", "Fully open on ground."], answer: "The valve opens more than 95 % during flight." },
+            { q: "On ECAM cab press page , the safety valve indication changes to amber:", options: ["When both safety valves are fully open.", "When either valve is not closed.", "When both safety valves are fully closed."], answer: "When either valve is not closed." },
+            { q: "On ECAM cab press page, the cabin altitude indication changes to red when the cabin altitude is:", options: ["> 14,000 FT", "> 8,500 FT", "> 9.550 FT"], answer: "> 9.550 FT" },
+            { q: "Following a SYS 1 fault:", options: ["Master caution is activated and ECAM actions must be taken by the crew.", "System 2 must be selected by the crew.", "System 2 takes over automatically without crew action ."], answer: "System 2 takes over automatically without crew action ." },
+            { q: "Cabin pre-pressurization starts at:", options: ["Engine starts.", "Take-off power selection.", "Lift-off"], answer: "Take-off power selection." },
+            { q: "The safety valve opens when the cabin differential pressure is", options: ["8,06 PSI", "8,6 PSI", "9,0 PSI", "7,6 PSI"], answer: "8,6 PSI" },
+            { q: "IF CAB ALT > __________ FT: PAX OXY MASKS...........................................................................................................MAN ON This action confirms that the passenger oxygen masks are released.", options: ["10,000", "12,000", "13,000", "14,000"], answer: "14,000" },
+            { q: "When descent is established and if time permits, check that the OUTFLOW VALVE is ____________ on the CAB PRESS SD page. If it is not _________ and ΔP is _________, select the other CPC.", options: ["closed , closed , negative", "open , closed , positive", "open . open , negative", "closed , closed , positive"], answer: "closed , closed , positive" },
+            { q: "The captain may call all cabin attendants at the same time :", options: ["TRUE", "FALSE"], answer: "TRUE" },
+            { q: "The safety valves are operated:", options: ["Electrically", "Hydraulically", "Pneumatically"], answer: "Pneumatically" },
+            { q: "What is the max norm CAB ALT ?", options: ["8.000 FT", "9.550 + 350 FT", "14.000 FT"], answer: "8.000 FT" },
+            { q: "The pressure safety valves open at:", options: ["8,06 PSI", "8,6 PSI", "9,0 PSI", "7,6 PSI"], answer: "8,6 PSI" },
+            { q: "APU N indication becomes amber on ECAM SD, when", options: ["N > 107 %.", "N > 102 %.", "N > 99 %"], answer: "N > 102 %." },
+            { q: "The APU is suplied from the:", options: ["Left fuel feed line", "Right fuel feed line."], answer: "Left fuel feed line" },
+            { q: "Interphone system permits you to speak to :", options: ["The cabin attendants", "All occupants in the cockpit", "The mechanic on the ground", "All the above."], answer: "All the above." },
+            { q: "If you select VHF 2 on RMP 1, the SEL light illuminates on :", options: ["RMP 1 only.", "RMP 2 only.", "RMP 1 and RMP 2"], answer: "RMP 1 and RMP 2" },
+            { q: "How do you address the \"Brace for impact\" command in case of PA system failure?", options: ["Flashing \"No Smoking\" sign", "Flashing \"Fasten Seat Belt\" sign", "Three chimes", "There is no other way"], answer: "Flashing \"Fasten Seat Belt\" sign" },
+            { q: "Recommended minimum battery voltage before APU start is :", options: ["25V", "27.5V", "No minimum"], answer: "25V" },
+            { q: "On the emer elec pwr panel,A fault light illuminates under the \"RAT and emer gen\"label. What does it mean ?", options: ["RAT is not extended", "Emergency generator is not supplying when AC BUS 1 and 2 are not powered (above 100 kts) or DC BUS is not powered.", "Emergency generator is suppliying but AC ESS BUS is not powered.", "Emergency generator is not supplying when AC BUS 1 and 2 are not powered and the gear is retracted ( norse L/G is up)"], answer: "RAT is not extended" },
+            { q: "The static inverter works:", options: ["Always", "When A/C is in flight and on batteries only.", "when one main generator fails"], answer: "When A/C is in flight and on batteries only." },
+            { q: "Where are the engine fire detectors located:", options: ["On the pylon ,the fan and the core sections.", "On the core and the gearbox.", "On the fan and the turbine."], answer: "On the pylon ,the fan and the core sections." },
+            { q: "Flight control computers are:", options: ["2 elac's - 2 sec's - 3 fac's", "2 elac's - 3 sec's - 2 fac's.", "3 elac's - 3 sec's - 2 fac's."], answer: "2 elac's - 3 sec's - 2 fac's." }
+        ],
+        auto_flight: [
+            { q: "The Autopilot will disconnect, if speed exceeds VMO/MMO, or if the bank angle exceeds ...... ", options: ["45º", "67º", "30º", "90º"], answer: "45º" },
+            { q: "The yaw bar is displayed in :", options: ["RWY mode on takeoff", "FLARE", "ROLL OUT mode at landing", "All of the above"], answer: "All of the above" },
+            { q: "When APs are not engaged and the flight crew does not follow the FD bars to maintain the commanded trajectory in climb with CLB or OP CLB (or EXP CLB) engaged, the FDs will disengage at the activation of the automatic speed mode protection.", options: ["TRUE", "FALSE"], answer: "TRUE" },
+            { q: "Automatic FD REMOVAL happens when;", options: ["The FD pitch bar is removed when no vertical mode is engaged or when ROLL OUT mode is engaged.", "The FD ROLL bar is removed when no lateral mode is engaged or when the RWY or ROLL OUT mode is engaged.", "Both FDs are removed when the aircraft pitch exceeds 25 ° up or 13 ° down, or bank angle exceeds 45 °.", "All of the above"], answer: "All of the above" },
+            { q: "Pitch FD bar (or FPV) flashes 10 s and then remains steady ;", options: ["If the ALT* mode is lost further to FCU altitude reference change of more than 250 ft.", "When in APPR mode (G/S*, G/S, LAND, FINAL), FD reverts to V/S mode (flight crew action or loss of vertical approach mode).", "One AP or one FD is engaged while both AP/FD were previously OFF.", "All of the above."], answer: "All of the above." },
+            { q: "Pitch FD bar (or FPV) flashes permanently when;", options: ["Transmission of the GLIDE data is interrupted when in G/S, G/S* modes above 100ft RA.", "Transmission of the GLIDE data is interrupted when in G/S, G/S* or LAND modes above 100ft RA.", "Transmission of the GLIDE data is interrupted when in G/S, G/S* modes above 350ft RA.", "Transmission of the GLIDE data is interrupted when in LAND mode above 350ft RA."], answer: "Transmission of the GLIDE data is interrupted when in G/S, G/S* or LAND modes above 100ft RA." },
+            { q: "Roll FD bar (or FPV) flashes permanently when;", options: ["Transmission of the LOC data is interrupted when in LOC, LOC* or LAND modes above 15ft RA", "Transmission of the G/S data is interrupted when in LOC, LOC* or LAND modes above 15ft RA.", "Transmission of the LOC data is interrupted when in LAND modes above 350ft RA.", "Transmission of the LOC data is interrupted when in LAND modes above 15ft RA."], answer: "Transmission of the LOC data is interrupted when in LOC, LOC* or LAND modes above 15ft RA" },
+            { q: "What are the four main functions of the two augmentation (FACs) computers?", options: ["YAW function", "Flight envelope function", "Low energy warning function", "All of the above"], answer: "All of the above" },
+            { q: "When performing the four main functions the FACs uses which independent channels?", options: ["Yaw damper", "Rudder travel limit", "Flight envelope", "All of the above"], answer: "All of the above" },
+            { q: "Each FAC interfaces with the elevator aileron computers (ELACs) when the APs are disengaged, or with the FMGS when at least one AP is engaged.", options: ["TRUE", "FALSE"], answer: "TRUE" },
+            { q: "Both FACs engage automatically at power-up.", options: ["TRUE", "FALSE"], answer: "TRUE" },
+            { q: "When a FAC is disengaged (FAC pushbutton set off) but still valid, the flight envelope function is also lost.", options: ["TRUE", "FALSE"], answer: "FALSE" },
+            { q: "Which of the statements is true?", options: ["If both FACs are valid, FAC1 controls the yaw damper, turn coordination, rudder trim, and rudder travel limit, and FAC2 is in standby.", "If both FACs are valid, FAC1 controls the yaw damper, turn coordination,and FAC2 controls rudder trim, and rudder travel limit.", "If both FACs are valid, FAC1 controls the yaw damper, rudder trim, and rudder travel limit, and FAC2 controls turn coordination.", "If both FACs are valid, FAC1 controls turn coordination and FAC2 controls the yaw damper, rudder trim, and rudder travel limit"], answer: "If both FACs are valid, FAC1 controls the yaw damper, turn coordination, rudder trim, and rudder travel limit, and FAC2 is in standby." },
+            { q: "FAC1 keeps the aircraft within the flight envelope through FD1; FAC2 performs this function through FD2.", options: ["TRUE", "FALSE"], answer: "TRUE" },
+            { q: "AUTO FLT A/THR LIMITED warning is displayed when A/THR is (_____) and the thrust levers are (_____) the CL detent (or the MCT detent when one engine is out). The caution is repeated every (__) s as long as the thrust levers are not moved.", options: ["inactive , below , 10 sec", "active , above , 5 sec", "active , below , 5 sec", "inactive , above , 10 sec"], answer: "active , below , 5 sec" },
+            { q: "In case of involuntary disconnection, amber “A/THR OFF” and “ENG THRUST LOCKED” messages are displayed in the (________________). For voluntary disconnection, an amber A/THR OFF message is displayed on the (________________).", options: ["Right lower part of ECAM upper DU , Left upper part of ECAM upper DU", "Left lower part of ECAM upper DU , Right lower part of ECAM upper DU", "Right upper part of ECAM lower DU , Left lower part of ECAM upper DU", "Left upper part of ECAM lower DU , Right upper part of ECAM lower DU"], answer: "Left lower part of ECAM upper DU , Right lower part of ECAM upper DU" },
+            { q: "AUTO FLT AP OFF warning is displayed only for involuntary disconnection. For voluntary disconnection a red AP OFF message is displayed in the right lower part of ECAM upper DU.", options: ["True", "False"], answer: "True" },
+            { q: "In case of “FCU 1 + 2 FAULT” failure the PNF must then perform the standard callouts (“HUNDRED ABOVE” and “MINIMUM”), using the __________ altimeter. ", options: ["Radar", "Barometric", "STDBY", "None of the above"], answer: "STDBY" },
+            { q: "In case of “FCU 1 + 2 FAULT” failure ‐ On PFD: • Altitude alert is inoperative. • ILS deviation scales are displayed. • Flight path vector is displayed. • Mach indication is inoperative. • FMA is lost except in LAND or GA mode.", options: ["True", "False"], answer: "True" },
+            { q: "IF “LOSS OF FMS DATA IN DESCENT/APPROACH (SEVERE RESET)” FAILURE OCCURS", options: ["LOC and G/S guidance modes are available", "VLS speed is still available and displayed on the PFD", "Missed approach trajectory is not available.", "All of the above"], answer: "All of the above" },
+            { q: "In “COM SINGLE PTT STUCK” malfunction If any Push To Talk (PTT) transmission selector (sidestick PTT or ACP PTT switch, hand mike PTT) is jammed in the transmit position for more than (______) s (VHF) or for more than (_______) s (HF), the COM SINGLE PTT STUCK ECAM alert is displayed and latched for the remainder of the flight.", options: ["30 , 100", "60 , 120", "50 , 160", "40 , 180"], answer: "60 , 120" },
+            { q: "Which choice is incorrect? The Flight Management Guidance System (FMGS) contains the following units:", options: ["Two Flight Management Guidance Computers (FMGC)", "Two Multipurpose Control and Display Units (MCDU) (third MCDU optional)", "Two Flight Control Units (FCU)", "Two Flight Augmentation Computers (FAC)."], answer: "Two Flight Control Units (FCU)" },
+            { q: "Which choice is incorrect? The Flight Management and Guidance System (FMGS) provides predictions of", options: ["Flight time", "Required oxygen amount for the flight", "Mileage and speed", "Economy profiles and altitude."], answer: "Required oxygen amount for the flight" },
+            { q: "If one FMGC fails, either FMGC performs all operations, (TRUE or False?)", options: ["True", "False"], answer: "True" },
+            { q: "Which of the below functions IS NOT controlled by the Flight Management (FM) part of the FMGC?", options: ["Navigation and management of navigation radios", "Management of flight planning", "Prediction and optimization of performance", "Flight Director (FD) command"], answer: "Flight Director (FD) command" },
+            { q: "Which of the below functions IS NOT controlled by the Flight Guidance (FG) part of the FMGC?", options: ["Autopilot (AP) command", "Flight Director (FD) command", "Autothrust (A/THR) command", "Prediction and optimization of performance"], answer: "Prediction and optimization of performance" },
+            { q: "Which of the following is incorrect? Each FMGC contains elements stored by the flight crew that enable them to create :", options: ["25 waypoints", "10 runways", "20 navaids", "5 routes"], answer: "25 waypoints" },
+            { q: "The FAC provides warning for low-energy and windshear detection if these functions are installed (TRUE or False?)", options: ["True", "False"], answer: "True" },
+            { q: "Which statement below is incorrect. The thrust levers:", options: ["Arm the autothrust at takeoff, when CLB is selected", "Disconnect the autothrust system when the flight crew sets them to IDLE", "Engage the common modes (takeoff or go-around) when TOGA (or FLX for takeoff) is set", "Set the autothrust to the active mode when they are between IDLE and CL detent (MCT in one engine out)"], answer: "Arm the autothrust at takeoff, when CLB is selected" },
+            { q: "The FMGS has four modes of operation in aircrafts... Which statement below is incorrect? If both FMGCs fail, the back up navigation provides the following functions:", options: ["Flight Planning", "Aircraft position using onside IRS, IRS3, or GPIRS position", "F-PLN display on PFD", "No AP/FD NAV mode"], answer: "F-PLN display on PFD" },
+            { q: "Which statement below is incorrect", options: ["If one autopilot (AP) is engaged, the related FMGC is master: It uses the onside FD for guidance, It controls the A/THR, It controls the FMA 1 and 2", "If two APs are engaged, FMGC1 is master.", "If no AP is engaged, and The FD1 pb is on, then FMGC1 is master, The FD1 pb is off, and FD2 pb on then FMGC2 is master.", "If no AP/FD is engaged, A/THR is controlled by FMGC2."], answer: "If no AP/FD is engaged, A/THR is controlled by FMGC2." },
+            { q: "Which statement below is incorrect. Both FMGCs work independently and are linked only to peripherals on their own sides of the flight deck (“onside” peripherals).", options: ["Each MCDU transmits data it receives from its onside FMGC", "It affects both EFIS(Electronic Flight Instrument System).", "On the POS MONITOR page (and GPS MONITOR page)", "On the RAD NAV page (and PROG page), navaids tuned on the MCDU..."], answer: "It affects both EFIS(Electronic Flight Instrument System)." },
+            { q: "One rotation of the V/S or FPA knob corresponds to 32 clicks. One complete rotation sets: FPA = 3.2 ° and V/S = 1 600 ft/min (TRUE or False?)", options: ["True", "False"], answer: "True" },
+            { q: "Each FMGC receives a position from each of the three IRSs, and computes a mean weighted average called the “MIX IRS” position (TRUE or False?)", options: ["True", "False"], answer: "True" },
+            { q: "If one of the IRSs drifts abnormally, the MIX IRS position uses an algorithm that decreases the influence of the drifting IRS within the MIX IRS position. (TRUE or False?)", options: ["True", "False"], answer: "True" },
+            { q: "If the GPIRS data does not comply with an integrity criterion that is based on a Horizontal Integrity Limit (HIL) and on the automatic detection of failed satellites, the FMS rejects the GPS mode and uses the radio position update (TRUE or False?)", options: ["True", "False"], answer: "True" },
+            { q: "Above which latitude the FM/GPS position disagreement alarm is not triggered?", options: ["50", "60", "70", "80"], answer: "70" },
+            { q: "Which statement regarding to Nav accuracy checking procedure is incorrect: ", options: ["While en route, check the HIGH/LOW accuracy information.", "If accuracy is \"LOW\", compare raw data from the tuned navaids with the corresponding FM computed data", "In descent, and in terminal and approach areas, validate the estimated accuracy", "If accuracy is \"HIGH\", periodically performing the comparison is not needed."], answer: "If accuracy is \"HIGH\", periodically performing the comparison is not needed." },
+            { q: "The FMGS uses the reference point coordinates of the departure airport to align the IRS. It calls these up from the database automatically after the flight crew has entered a company route or an origin-destination city pair and pressed the ALIGN IRS key on the MCDU. A normal alignment takes", options: ["10 min", "7 min", "5 min", "30 sec."], answer: "10 min" },
+            { q: "When does the “IRS IN ALIGN” memo NOT flash on the E/WD during the alignment process", options: ["It has detected excessive motion.", "It has detected a disagreement between the position the MCDU has sent to the IRS, and the last memorized IRS position.", "It has detected a disagreement between the latitude the MCDU has sent to the IRS, and the latitude the IRS has computed", "The IRS has received a position from the MCDU ."], answer: "The IRS has received a position from the MCDU ." }
+        ],
+        electrics: [
+            { q: "In normal configuration, how is the DC ESS BUS supplied ?", options: ["From TR 1", "From ESS TR", "FROM TR 2", "FROM BAT 2"], answer: "From TR 1" },
+            { q: "In normal configuration AC ESS BUS is normally supplied by: ", options: ["AC BUS 1.", "AC BUS 2.", "Emergency generator.", "Static inverter."], answer: "AC BUS 1." },
+            { q: "DC BAT BUS can be supplied by :", options: ["DC BUS 1 or BATTERIES.", "DC BUS 1, DC BUS 2 or BATTERIES.", "DC BUS 2 OR BATTERİES."], answer: "DC BUS 1, DC BUS 2 or BATTERIES." },
+            { q: "What happens during the emer gen test ?", options: ["The ram air turbine (RAT) is extended.", "The EMER GEN is driven hydraulically if blue electrical pump is running and if AC NORMAL BUSES are supplied.", "The green system is pressurized and the emergency generator comes on line, supplied by HOT BUS 2"], answer: "The EMER GEN is driven hydraulically if blue electrical pump is running and if AC NORMAL BUSES are supplied." },
+            { q: "On the emer elec pwr panel, A fault light illuminates under the \"RAT and emer gen\"label. What does it mean ? ", options: ["RAT is not extended.", "DC ESS BUS is not powered.", "Emergency generator is suppliying but AC ESS BUS is not powered.", "Emergency generator is not supplying power when AC BUS 1 and 2 are not powered."], answer: "Emergency generator is not supplying power when AC BUS 1 and 2 are not powered." },
+            { q: "What happens when the GEN 1 line pushbutton is set to off ?", options: ["AC BUS 1 and 2 are not powered and emergency generator is automaticlly connected.", "AC BUS 1 is powered by GEN 1 because GEN 1 line is deactivated.", "AC BUS 1 is powered by GEN 2 because GEN 1 line contactor is opened.", "AC bus 1 is not powered because GEN 1 line contactor is opened and the transfer contactor is not closed."], answer: "AC BUS 1 is powered by GEN 2 because GEN 1 line contactor is opened." },
+            { q: "In cold aircraft configuration (no AC and no DC supply),Where can the batteries voltage be checked ? ", options: ["On the Ecam Elec Page.", "On the Elec overhead panel.", "There is no indication."], answer: "On the Elec overhead panel." },
+            { q: "What happens during the emer gen test ? 4.soru ile aynı cevap da yanlış", options: ["The emergency generator comes on line, supplied by HOT BUS 2 ,and the HYDRULIC GREEN SYSTEM is pressurized.", "The RAM AIR TURBİNE (RAT) is extended.", "As the blue system is already pressurized the emergency generator comes on line."], answer: "As the blue system is already pressurized the emergency generator comes on line." },
+            { q: "BUS TIE contactor when closed enable AC BUS 1 and 2 :", options: ["To be supplied by any one of the main generators or external power.", "To be supplied by APU generators or external power only.", "To be connected in parallel."], answer: "To be supplied by any one of the main generators or external power." },
+            { q: "In flight ,on batteries only, the AC ESS shed BUS and the DC ESS shed BUS are lost :", options: ["YES", "NO"], answer: "YES" },
+            { q: "The static inverter is activated:", options: ["Always", "When A/C is in flight and on batteries only.", "when one main generator fails."], answer: "When A/C is in flight and on batteries only." },
+            { q: "Recommended minimum battery voltage before APU start is :", options: ["25.5V", "27.5V", "22V", "No minimum"], answer: "25.5V" },
+            { q: "On ground what happenns if the EMER ELEC PWR MAN ON (guarded) push button is pressed in:", options: ["RAT is extended", "The emergency generator is tested", "Nothing"], answer: "RAT is extended" },
+            { q: "On the EMER ELEC PWR panel ,if the fault light comes on under \"RAT & EMER GEN \" label, what does it mean ?", options: ["Emergency generator is supplying but AC ESS BUS is not powered", "Emergency generator is not supplying power when AC BUS 1 and 2 are not powered", "RAT is not extended", "DC ESS BUS is not powered"], answer: "Emergency generator is not supplying power when AC BUS 1 and 2 are not powered" },
+            { q: "The static invertor transforms the DC voltage from the battery BUS into:", options: ["Single phase 115V. 400 HZ AC current.", "Three phase 115V/200V. 400 HZ AC currrent."], answer: "Single phase 115V. 400 HZ AC current." },
+            { q: "In flight, in case of loss of all main generators,emergency generator not running,the static inverter supplies:", options: ["AC ESS BUS.", "ENG start + AC ESS BUS + AC ESS shed BUS.", "Eng start."], answer: "AC ESS BUS." },
+            { q: "The external power has priority over the APU GEN :", options: ["YES", "NO"], answer: "YES" },
+            { q: "GEN 1 AND GEN 2, when operating, have priority over APU GEN :", options: ["YES", "NO"], answer: "YES" },
+            { q: "With APU available, if one ENG generator fails, the failed generator is replaced by :", options: ["The APU", "The other ENG generator."], answer: "The APU" },
+            { q: "In case of a TR failure, does the ESS TR supply the DC ESS BUS?", options: ["YES", "NO"], answer: "YES" },
+            { q: "In flight, ın case of loss of all generators, emergency generator not running, the DC ESS BUS is supplied by:", options: ["HOT BUS 2", "ESS TR", "both"], answer: "HOT BUS 2" },
+            { q: "In flight, in case of lose of all main generator, emergency generator running ,the DC ESS BUS is supplied by :", options: ["HOT BUS 2", "ESS TR", "both"], answer: "ESS TR" },
+            { q: "The IDG regulates the :", options: ["speed", "voltage", "frequency of the generator"], answer: "speed" },
+            { q: "Generators are sometimes connected in parallel.", options: ["YES", "NO"], answer: "NO" },
+            { q: "What happens in case of total loss of main generators ?", options: ["The RAT is automatically extended an powers the yellow hydraulic system which drives the emergency generator (provided nose L/G is up ).", "The RAT is extended and mechanically connected to the emergency generator.", "The RAT is automatically extended and powers the blue hydraulic system which drives the emergency generator", "The rat has to be manually extended."], answer: "The RAT is automatically extended and powers the blue hydraulic system which drives the emergency generator" },
+            { q: "If AC BUS 1 fails the AC ESS BUS is supplied by:", options: ["EMER GEN", "AC BUS 2.", "STATIC INVERTER"], answer: "AC BUS 2." },
+            { q: "During flight with batteries only, the AC ESS BUS is supplied by:", options: ["STATIC INVERTER", "ESS TR", "both"], answer: "STATIC INVERTER" },
+            { q: "In emergency configuration, AC ESS SHED BUS is automatically : FCOM değişti soru iptal", options: ["SHED with L/G down .", "supplied by static inverter when L/G is down."], answer: "SHED with L/G down ." },
+            { q: "If an engine generator fails in flight:", options: ["Main galley is automatically shed if APU GEN is not online", "Main galley is automatically shed with or without APU GEN online", "All galleys are shed"], answer: "Main galley is automatically shed if APU GEN is not online" },
+            { q: "Can you reconnect the IDG in flight?", options: ["YES", "NO"], answer: "NO" },
+            { q: "When disconnecting the IDG, the pushbotton switch should be pressed:", options: ["For no more than 3 seconds.", "For more than 5 seconds.", "For longer than 3 seconds.", "Until the fault light goes out."], answer: "For no more than 3 seconds." },
+            { q: "When GEN 1 or GEN 2 is selected off: Soru yanlış", options: ["The GEN is de-energized and the line contactor is open.", "The gen is still energeized and the line contactor is open."], answer: "The GEN is de-energized and the line contactor is open." },
+            { q: "The green EXT power push botton avail light is on. What does it mean? ", options: ["The EXT power is plugged in.", "The A/C network is supplied."], answer: "The EXT power is plugged in." },
+            { q: "When do the batteries supply the DC Bat BUS. Soru yanlış.", options: ["APU starting", "Loss of AC BUS 1", "Loss of AC BUS 1+ 2 ( speed<100 kts)", "A + C"], answer: "A + C" },
+            { q: "When you want to check battery voltage, you must set the BAT pushbutton to : FCOM değişti", options: ["Auto position", "Off position"], answer: "Off position" },
+            { q: "The Battery fault light comes on when:", options: ["Battery voltage < 25.", "Battery Push button is set to OFF in flight.", "Charging current increase at an abnormal rate."], answer: "Charging current increase at an abnormal rate." },
+            { q: "During flight with batteries only, the static inverter is supplied by:", options: ["HOT BUS 1 and HOT BUS 2", "HOT BUS 1", "DC BAT BUS"], answer: "HOT BUS 1" },
+            { q: "In the case of an AC BUS 1 FAULT, the AC ESS BUS and the DC ESS BUS will automatically recover, due to the fact that the AC BUS 2 will automatically supply the AC ESS BUS. If AC BUS 2 does not automatically supply the AC ESS BUS, the flight crew can recover the AC ESS BUS and the DC ESS BUS by setting the AC ESS FEED pb-sw to ALTN.", options: ["True", "False"], answer: "True" }
+        ],
+        fmgs: [
+            { q: "WHAT DOES IT MEAN IF AN ADR FAULT LIGHT COMES ON, ON THE ADIRS CDU? ", options: ["A FAULT IS DETECTED IN THE AIR DATA REFERENCE PART", "THE AIR DATA OUTPUT IS DISCONNECTED", "THE PITOT TUBE HEATING SYSTEM IS NOT SUPPLIED"], answer: "A FAULT IS DETECTED IN THE AIR DATA REFERENCE PART" },
+            { q: "Flight Management Guidance System (FMGS) contains the following units:", options: ["2 FMGCs - 2 MCDUs - 2 FACs - 2 FCUs", "2 FMGCs - 2 MCDUs - 2 FACs - 1 FCU", "2 FMGCs - 2 MCDUs - 2 FACs - 2 ECAMs", "2 FMGCs - 2 MCDUs - 2 ECAMs - 1 FCU"], answer: "2 FMGCs - 2 MCDUs - 2 FACs - 1 FCU" },
+            { q: "NORMAL ELECTRICAL POWER SUPPLIES THE A/C AND THE MCDU CRT IS DARK, WITHOUT ANY OTHER WARNING, IT MEANS :", options: ["THE FMGC IS OFF", "THE FMGC HAS FAILED", "THE MCDU CB IS PULLED", "THE MCDU \"BRT\" KNOB IS DIMMED"], answer: "THE MCDU \"BRT\" KNOB IS DIMMED" },
+            { q: "WHAT HAPPENS WHEN THE ATT HDG AND AIR DATA SELECTORS, ON THE PEDESTAL MOUNTED SWITCHING PANEL, ARE SET TO NORM?", options: ["ADIRU 1 SUPPLIES DATA TO PFD1, ND1 - ADIRU 2 SUPPLIES DATA TO PFD2, ND2", "ADIRU 1 SUPPLIES DATA TO PFD1, ND1, RMI AND VOR/DME - ADIRU 2 SUPPLIES DATA TO PFD2, ND2", "ADIRU 1 SUPPLIES DATA TO PFD1 - ADIRU 2 SUPPLIES DATA TO PFD2"], answer: "ADIRU 1 SUPPLIES DATA TO PFD1, ND1, RMI AND VOR/DME - ADIRU 2 SUPPLIES DATA TO PFD2, ND2" },
+            { q: "ON THE GROUND, WHEN ELECTRICAL POWER IS INITIALLY SUPPLIED TO THE A/C, THE MCDU WILL AUTOMATICALLY DISPLAY : ", options: ["AIRPORT PAGE", "INIT A PAGE", "DATA INDEX PAGE", "A/C STATUS PAGE"], answer: "A/C STATUS PAGE" },
+            { q: "YOU PRESS \"ALIGN IRS\" PROMPT ON INIT A PAGE, ON THE ADIRS CDU THE ALIGN LIGHTS FLASH BUT NO MESSAGE IS DISPLAYED ON THE CDU :", options: ["THE SYSTEM CAN ONLY BE USED IN ATT MODE", "THE SYSTEM IS UNABLE TO ENTER NAV MODE TO COMPUTE COORDINATES : SWITCH IT OFF", "MAKE A SECOND \"PRESENT POSITION\" ENTRY"], answer: "MAKE A SECOND \"PRESENT POSITION\" ENTRY" },
+            { q: "THESE MESSAGES APPEAR ON COPILOT SIDE ND : \"SELECT OFF SIDE RANGE/MODE\" & \" MAP NOT AVAILABLE\"", options: ["THE IRS'S HAVE NOT REACHED COMPLETE ALIGNMENT", "THE F-PLN ENTERED IN CAPTAIN'S FMGC HAS NOT BEEN TRANSFERRED INTO COPILOT'S FMGC", "SINGLE FMGC OPERATION WHEN THE TWO EFIS CONTROL PANELS ARE NOT SET AT THE SAME RANGE & MODE"], answer: "SINGLE FMGC OPERATION WHEN THE TWO EFIS CONTROL PANELS ARE NOT SET AT THE SAME RANGE & MODE" },
+            { q: "ENGINES RUNNING, READY TO TAXI, A MESSAGE APPEARS : \"CHECK GW\". ACCESS TO INIT B PAGE IS NO LONGER AVAILABLE. ON WHICH PAGE IS IT POSSIBLE TO INSERT THE CORRECT GW ?", options: ["T/O PERFORMANCE PAGE", "PROGRESS PAGE", "FUEL PREDICTION PAGE"], answer: "FUEL PREDICTION PAGE" },
+            { q: "IN CASE OF FAILURE OF FMGC1 AND 2 ; AFTER NAV SELECTION ON BOTH RMPs", options: ["Both VORs and both ADFs can be tuned through CAPT RMP", "VOR1 and ADF1 can be tuned through F/O RMP", "CAPT RMP controls VOR1, ADF1; F/O RMP controls VOR2, ADF2"], answer: "CAPT RMP controls VOR1, ADF1; F/O RMP controls VOR2, ADF2" },
+            { q: "AIRCRAFT ON RWY CENTERLINE, READY FOR TAKE-OFF. TO PRESET A HDG OF 233º: ", options: ["PULL HDG KNOB TO DISARM NAV MODE, SET 233º AND PRESS HDG KNOB TO ENGAGE", "TURN HDG KNOB, SET 233º AND PULL TO ARM", "TURN HDG KNOB, SET 233º AND PULL HDG KNOB WHEN ATC CLEARS TO TURN TO 233º"], answer: "TURN HDG KNOB, SET 233º AND PULL HDG KNOB WHEN ATC CLEARS TO TURN TO 233º" },
+            { q: "WHICH OF THE SRS DISENGAGEMENT CONDITIONS IS NOT TRUE ?", options: ["DISENGAGES AUTOMATICALLY AT FCU ALT", "DISENGAGES AUTOMATICALLY AT ACCELERATION ALTITUDE", "DISENGAGES BY MANUALLY PULLING THE ALTITUDE KNOB", "DISENGAGES BY SETTING A NEW FCU ALTITUDE"], answer: "DISENGAGES BY SETTING A NEW FCU ALTITUDE" },
+            { q: "CONTROL OF THE A/C CAN BE AUTOMATIC OR MANUAL. GUIDANCE OF THE A/C CAN BE MANAGED OR SELECTED. HOW DO YOU UNDERSTAND THIS SITUATION : MANAGED GUIDANCE - MANUAL CONTROL - SELECTED SPEED :", options: ["FMGC COMPUTES AND SENDS STEERING ORDERS FOR NAVIGATION PURPOSES. THE PILOT FLIES USING THE SIDE STICK. SPEED IS ADJUSTED IN THE FCU WINDOW.(KNOB HAS BEEN PULLED).", "THE AUTOPILOT FOLLOWS THE F-PLN. THE PILOT SETS THE NECESSARY DATA FOR LONGITUDINAL AND LATERAL CONTROL OF THE A/C. THE TARGET SPEED IS COMPUTED AND DISPLAYED BY THE FMGC."], answer: "FMGC COMPUTES AND SENDS STEERING ORDERS FOR NAVIGATION PURPOSES. THE PILOT FLIES USING THE SIDE STICK. SPEED IS ADJUSTED IN THE FCU WINDOW.(KNOB HAS BEEN PULLED)." },
+            { q: "A HOLD HAS BEEN ENTERED IN THE F-PLN, SPEED AND NAV ARE MANAGED. YOU WANT TO LEAVE THIS HOLD : ", options: ["USE THE CLR KEY", "HOLD IS AUTOMATICALLY CANCELLED WHEN OVERFLYING THE FIX", "ACTIVATE \"IMM EXIT\" PROMPT"], answer: "ACTIVATE \"IMM EXIT\" PROMPT" },
+            { q: "FOR A/C POSITION DETERMINATION, FMGC USES DATA FROM :", options: ["DME, VOR OR ILS SYSTEMS", "CLOCKS+GROUND SPEED COMPUTATION", "3 ADIRS", "A AND C"], answer: "A AND C" },
+            { q: "In flight, following a manual position up-dating of the FMGC :", options: ["It is also necessary to up-date the IRS position", "An IRS cannot be up-dated while the A/C is in motion"], answer: "An IRS cannot be up-dated while the A/C is in motion" },
+            { q: "Tuning of VOR/DME and ILS are provided by :", options: ["Automatic tuning, Manual tuning, Back up tuning", "Automatic tuning, Manual tuning", "Automatic tuning, Back up tuning"], answer: "Automatic tuning, Manual tuning, Back up tuning" },
+            { q: "When expedite mode is active, to disengage it, which statements is not correct :", options: ["Pull the V/S-FPA knob", "Pull the SPD knob", "Pull the ALT knob", "Press the EXPD push button again to cancel this mode"], answer: "Press the EXPD push button again to cancel this mode" },
+            { q: "What are the basic modes of the AP/FD :", options: ["Pitch and roll", "V/S and HDG", "Alt and nav", "Spd and hdg"], answer: "V/S and HDG" },
+            { q: "During an ILS approach, the engagement of both autopilots is possible:", options: ["When \"LAND\" illuminates green on FMA", "When A/C is stabilized at G/S interception altitude", "As soon as the LOC has been intercepted", "After APPR push button switch is pressed and illuminated"], answer: "After APPR push button switch is pressed and illuminated" },
+            { q: "The align light flashes :", options: ["If IR alignment fault or no present position entry after 10 minutes", "If the difference between position at shut down and entered position, exceeds 1º of latitude or longitude", "When alignment has been completed", "Both A and B"], answer: "Both A and B" },
+            { q: "Can you read the HDG on the PFD :", options: ["Yes", "No"], answer: "Yes" },
+            { q: "If the flight augmentation computer detects that the angle of attack is above a predetermined threshold, which is a function of the configuration:", options: ["Stall warning is activated", "THR LK starts flashing on FMA", "Alpha floor protection is triggered"], answer: "Alpha floor protection is triggered" },
+            { q: "During an ILS Cat III Dual approach with a DH of 20 feet, a failure of one engine below alert height causes landing capability to downgrade and you must initiate a go-around.", options: ["True", "False"], answer: "False" },
+            { q: "During an ILS approach, the NAV mode will be deactivated at :", options: ["Glideslope capture", "Localizer capture", "A+B"], answer: "Localizer capture" },
+            { q: "Can you display FD bars and FPV at the same time, for cross-checking on different pfd's", options: ["Yes", "No"], answer: "No" },
+            { q: "Maximum wind conditions for Cat II or Cat III automatic approach landing and roll out:", options: ["Headwind 30kt, tailwind 10kt, crosswind 20kt", "Headwind 40kt, tailwind 10kt, crosswind 15kt", "Headwind 20kt, tailwind 10kt, crosswind 20kt"], answer: "Headwind 30kt, tailwind 10kt, crosswind 20kt" },
+            { q: "The continuous cavalry charge audio identifies only one of the following situations :", options: ["Over speed for the actual A/C configuration", "Fire or oil low press on one engine", "Autopilot disengagement", "Auto land warning, requiring a GO ARAUND"], answer: "Autopilot disengagement" },
+            { q: "Setting the thrust levers to IDLE will disengage the A/THR mode. A/THR will be armed and activated", options: ["As soon as the thrust levers position is changed", "When the A/THR pushbutton on FCU is pressed", "Provided the levers are set in CLB detent", "Thrust levers must be moved from IDLE position before A/THR pushbutton on FCU is pressed"], answer: "When the A/THR pushbutton on FCU is pressed" },
+            { q: "In one of the cases listed below, A/THR will not disengage :", options: ["When the two thrust levers are set to IDLE position", "Pressing the A/THR push button on the FCU", "When the aural warning announces \"RETARD !\"", "Pressing the instinctive disconnect button"], answer: "When the aural warning announces \"RETARD !\"" },
+            { q: "The LOC pushbutton on the FCU, is pressed to ARM the LOC mode. This mode can also be used for tracking a VOR beam if a VOR fequency is set on the RAD NAV page.", options: ["True", "False"], answer: "False" },
+            { q: "What does a triple click mean, during an ILS approach :", options: ["A/P disconnection due to failure", "A primary failure is occuring, prepare for a go around", "Flaps are set at config3 and the landing gear is not down", "Landing capability downgrade"], answer: "Landing capability downgrade" },
+            { q: "The active F-PLN is erased when :", options: ["The pilot calls the A/C status page", "The wheels touch the runway at landing", "The A/C has been on ground for 30 seconds following the landing", "One engine is shut down at parking place"], answer: "The A/C has been on ground for 30 seconds following the landing" },
+            { q: "Following a dual engine generator failure with the emergency generator supplying the A/C :", options: ["FMGC 1 is available (NAV function only)", "FMGC 2 only is available", "Both FMGCs are available", "No FMGC is available"], answer: "FMGC 1 is available (NAV function only)" },
+            { q: "In which case are : AP/FD, ATS and landing capacities totally lost :", options: ["Failure of 2 IRS's or failure of 2 ADR's", "Failure of 2 RA's", "Failure of 2 ILS's", "Failure of both FAC's"], answer: "Failure of 2 IRS's or failure of 2 ADR's" },
+            { q: "The parameter which triggers the alpha floor protection is :", options: ["Speed", "Bank angle", "Pitch", "Angle of attack"], answer: "Angle of attack" },
+            { q: "Rudder travel limitation is a function of :", options: ["FAC only", "FAC in normal and ELAC in alternate", "ELAC only", "ELAC in normal and FAC in alternate"], answer: "FAC only" },
+            { q: "When the two yaw damper functions are engaged :", options: ["Yaw damper 1 has priority, yaw damper actuator 2 is slaved", "Yaw damper 2 has priority, yaw damper actuator 1 is slaved", "Yaw damper 1 and 2 are active, the two actuators pressurized", "A hydraulic device gives priority to yaw damper 1"], answer: "Yaw damper 1 has priority, yaw damper actuator 2 is slaved" },
+            { q: "The FMGC internal test is automatically performed :", options: ["On ground, at computer power up", "In case of discrepancy between 2 computers", "In flight when a failure occurs", "In flight at autopilot engagement"], answer: "On ground, at computer power up" },
+            { q: "When the two rudder trim functions are engaged :", options: ["Rudder trim 1 and 2 control their motors together", "Rudder trim 1 controls the single trim motor", "Rudder trim 1 controls its motor, rudder trim 2 is in standby", "A mechanical device gives priority to rudder trim 1"], answer: "Rudder trim 1 controls its motor, rudder trim 2 is in standby" },
+            { q: "Each FMGC is devided into two main parts :", options: ["Flight guidance and flight envelope protection", "Flight management and flight envelope protection", "Flight management and flight guidance", "Flight envelope protection and yaw axis control"], answer: "Flight management and flight guidance" },
+            { q: "The trim function of the FAC is :", options: ["Pitch trim", "Rudder trim", "Aileron trim", "Pitch trim and rudder trim"], answer: "Rudder trim" },
+            { q: "In flight, in case of temporary loss of electrical power on FAC 2, FAC 2 P/B \"FAULT\" comes on and :", options: ["It will be automatically reset", "It can be manually reset and the safety tests are performed", "It can be manually reset and safety tests are not performed", "There is no way to re-engage FAC 2"], answer: "It can be manually reset and safety tests are not performed" },
+            { q: "The Flight Management Guidance System computers are:", options: ["FMGCs and ELACs", "FMGCs and SECs", "FMGCs and FACs", "ELACs and SECs"], answer: "FMGCs and FACs" },
+            { q: "With AP1 and AP2 not engaged, FD1 and FD2 engaged an A/THR active :", options: ["FMGC1 controls engine 1, FMGC2 control engine 2", "FMGC1 controls both engines", "FMGC2 controls both engines", "Flight controls and engines are controlled by only one FMGC"], answer: "FMGC1 controls both engines" },
+            { q: "In normal operation, with the two MCDU showing the same page, A modification made by the pilot on MCDU1 is sent to MCDU2 :", options: ["Directly", "Via FMGC1", "Via FMGC1 AND FMGC2", "Via FMGC1, FMGC2 and RMP2"], answer: "Via FMGC1 AND FMGC2" },
+            { q: "The Flight Guidance part of the FMGS controls:", options: ["Autopilot, fligth plan, autothrust", "Autopilot, performance, flight plan", "Autopilot, flight director, autothrust", "Flight management, autopilot, autothrust"], answer: "Autopilot, flight director, autothrust" },
+            { q: "The position of the aircraft, used in the flight plan is computed by :", options: ["FG part of the FMGC", "FM part of the FMGC", "The DMC", "The MCDU"], answer: "FM part of the FMGC" },
+            { q: "The flight director is engaged :", options: ["By pressing the FD push button on the FCU", "Automatically at system power up", "By selecting a mode on the FCU", "By selecting the init page on the MCDU"], answer: "Automatically at system power up" },
+            { q: "With autopilot engaged, the rudder is normally controlled by :", options: ["The FMGC", "The FAC", "The ELAC", "The SEC"], answer: "The FAC" },
+            { q: "The normal FMGC operation is :", options: ["Only one FMGC can operate at a time", "FMGC 1 has priority, FMGC 2 is in standby", "FMGC's operate according to master/slave principle", "FMGC's operate independently"], answer: "FMGC's operate according to master/slave principle" },
+            { q: "The FCU alllows :", options: ["Modification of the flight plan of FM part", "Selection of FG function modes", "Selection of radio-nav frequencies", "IRS alignment"], answer: "Selection of FG function modes" },
+            { q: "In cruise, lateral ap orders are executed by :", options: ["Ailerons and spoilers", "Ailerons and rudder", "Rudder and spoilers", "Ailerons, spoilers and rudder"], answer: "Ailerons, spoilers and rudder" },
+            { q: "With the aircraft in flight, AP engaged and A/THR active, the A/THR MODE :", options: ["Can be chosen by the pilot on the FCU", "Can be chosen by the pilot on the MCDU", "Depends on the AP lateral mode", "Depends on the AP longitudinal mode"], answer: "Depends on the AP longitudinal mode" },
+            { q: "With the aircraft in flight, A/THR not engaged, thrust levers at IDLE, an alpha-floor is detected :", options: ["A/THR does not engage because the thrust levers are at IDLE", "A/THR is automatically armed but will not be active", "A/THR automatically engages and sets CLB thrust on the engines", "A/THR automatically engages and sets TO/GA thrust on the engines"], answer: "A/THR automatically engages and sets TO/GA thrust on the engines" },
+            { q: "The FAC computes rudder travel limit", options: ["Only when AP is engaged", "Only at low speed", "Only in case of ELAC failure", "Always"], answer: "Always" },
+            { q: "With AP engaged in land mode, the yaw damper actuator is controlled by :", options: ["A yaw order computed by the FAC", "A dutch roll damping order computed by the FAC", "A turn coordination order computed by the FAC", "An AP yaw order computed by the FMGC, via the FAC"], answer: "An AP yaw order computed by the FMGC, via the FAC" },
+            { q: "On the second line of the FMA ", options: ["ALT can be only in green or magenta", "ALT in blue indicates that ALT mode is active", "ALT in blue indicates that ALT mode is armed", "ALT in blue indicates that ALT mode is active or an FM altitude constraint"], answer: "ALT in blue indicates that ALT mode is armed" },
+            { q: "With the thrust levers in the CLB detent and autothrust is disconnected via autothrust pushbutton on th FCU, thrust setting on the engines:", options: ["Is increased to CLB thrust limit", "Is frozen at the existing thrust", "Corresponds to the thrust levers position", "Progressively becomes equal to the thrust levers position"], answer: "Is frozen at the existing thrust" },
+            { q: "When thrust levers are set for take-off:", options: ["A/THR automatically engages and is active", "A/THR automatically engages but is not active", "A/THR does not automatically engage", "A/THR does not automatically engage and the engines are controlled by the last thrust target"], answer: "A/THR automatically engages but is not active" },
+            { q: "ADIRU 3 CAN SUPPLY INFORMATION TO :", options: ["DMC 1 AND DMC 2 ONLY", "DMC 1 AND DMC 3 ONLY", "DMC 2 AND DMC 3 ONLY", "DMC 1, DMC 2 AND DMC 3"], answer: "DMC 1, DMC 2 AND DMC 3" },
+            { q: "Air Data Modules (ADMs) convert pneumatic data into numerical data for the ADIRUs, which is supplied from:", options: ["All pitot probes and static ports", "Pitot probes only", "Static ports only", "Captain and F/O pitot probes and static ports only"], answer: "All pitot probes and static ports" },
+            { q: "ADIRU 3 RECEIVES TAT INFORMATION FROM :", options: ["THE CAPTAIN'S TAT SENSOR", "THE FIRST OFFICER'S TAT SENSOR", "THE CAPTAIN AND FIRST OFFICER'S TAT SENSORS", "THE STAND-BY TAT SENSOR"], answer: "THE CAPTAIN'S TAT SENSOR" },
+            { q: "The baro reference is sent to each ADIRU via:", options: ["The master FMGC", "The FCU", "The RMPS", "The DMCS"], answer: "The FCU" },
+            { q: "IN FLIGHT, THE FMGS POSITION IS AUTOMATICALLY UPDATED :", options: ["USING DATA FROM THE SELECTED NDB, VOR OR DME STATIONS", "WHENEVER A DME STATION IS SELECTED BY THE PILOT", "BY THE DME'S THROUGH THE AUTOTUNING FUNCTION"], answer: "BY THE DME'S THROUGH THE AUTOTUNING FUNCTION" },
+            { q: "EACH ADIRU RECEIVES TWO ANALOG INPUTS, THEY ARE :", options: ["ANGLE OF ATTACK (AOA) AND TOTAL AIR TEMPERATURE (TAT)", "ANGLE OF ATTACK (AOA) AND BARO CORRECTION OR REFERENCE", "TOTAL AIR TEMPERATURE (TAT) AND BARO CORRECTION OR REFERENCE", "FMGC STATUS AND BARO CORRECTION OR REFERENCE"], answer: "ANGLE OF ATTACK (AOA) AND TOTAL AIR TEMPERATURE (TAT)" },
+            { q: "In normal operation, the ADIRUs are aligned using position information from:", options: ["The ADIRS CDU", "The CFDS", "The FCU", "The MCDU"], answer: "The MCDU" },
+            { q: "IF ADIRU 2 FAILS, THE CORRECT ACTION IS :", options: ["Set ATT HDG and AIR DATA selectors to CAPT 3", "Set ATT HDG and AIR DATA selectors to F/O 3", "Set ATT HDG SELECTOR to CAPT 3 and AIR DATA selector to F/O 3", "Set ATT HDG SELECTOR to F/O 3 and AIR DATA selector to CAPT 3"], answer: "Set ATT HDG and AIR DATA selectors to F/O 3" },
+            { q: "IN NORMAL OPERATION ADIRU 1 SUPPLIES INFORMATION TO :", options: ["THE CAPTAIN'S PFD AND THE FIRST OFFICER'S ND", "THE CAPTAIN'S ND AND THE FIRST OFFICER'S PFD", "THE CAPTAIN'S PFD AND ND", "THE FIRST OFFICER'S PFD AND ND"], answer: "THE CAPTAIN'S PFD AND ND" },
+            { q: "IN ROSE NAV MODE WITH VOR 1 SELECTED, THE ND DISPLAYS WHAT VOR INFORMATION : ", options: ["DEVIATION BAR, SELECTED COURSE AND THE BEARING POINTER", "BEARING POINTER ONLY", "DEVIATION BAR AND SELECTED COURSE ONLY", "DEVIATION BAR AND BEARING POINTER ONLY"], answer: "BEARING POINTER ONLY" },
+            { q: "IN ROSE ILS MODE, WHAT ILS INFORMATION DOES THE ND DISPLAY : ", options: ["G/S AND LOC SCALES", "DEVIATION BAR AND SELECTED COURSE", "DEVIATION BAR, SELECTED COURSE AND G/S SCALE", "DEVIATION BAR, SELECTED COURSE, G/S AND LOC SCALES"], answer: "DEVIATION BAR, SELECTED COURSE, G/S AND LOC SCALES" },
+            { q: "During an ILS approach with FDs ON, \"LAND\" illuminates in green on FMA when radio altitude is below:", options: ["1.000 ft", "200 ft", "700 ft", "400 ft"], answer: "400 ft" },
+            { q: "IN THE EVENT OF NO ADF1 RECEPTION, WITH ADF1 SELECTED ON ND :", options: ["THE BEARING POINTER GOES OUT OF VIEW AND ADF FLAG IS DISPLAYED", "THE BEARING POINTER GOES OUT OF VIEW AND STATION ID IS REPLACED BY RED CROSSES", "THE BEARING POINTER GOES RED AND STATION ID IS REPLACED BY FREQUENCY", "THE BEARING POINTER GOES OUT OF VIEW AND STATION ID IS REPLACED BY FREQUENCY"], answer: "THE BEARING POINTER GOES OUT OF VIEW AND STATION ID IS REPLACED BY FREQUENCY" },
+            { q: "ON THE ND, IN THE EVENT OF VOR RECEIVER FAILURE :", options: ["THE RED VOR FLAG IS DISPLAYED. THE COURSE POINTER BECOMES RED", "THE VOR BEARING BECOMES RED AND THE COURSE POINTER DISAPPEARS", "THE VOR BEARING AND THE COURSE POINTER DISAPPEAR", "THE VOR BEARING FLASHES AND THE COURSE POINTER DISAPPEARS"], answer: "THE RED VOR FLAG IS DISPLAYED. THE COURSE POINTER BECOMES RED" },
+            { q: "DURING TAKE-OFF AND GO AROUND.THE SPEED WINDOW ON THE FCU DISPLAYS :", options: ["THE SPEED MANUALLY INSERTED BY THE CREW INTO THE FCU AND THE LIGHT IS OUT", "THE SPEED MANUALLY INSERTED BY THE CREW INTO THE MCDU AND THR LIGHT IS ILLUMINATED", "DASHES AND THE DOT ARE ILLUMINATED WHITE : MANAGED SPEED SUCH AS V2 OR MEMORIZED VAPP ARE AUTOMATICALLY USED BY THE FMGS"], answer: "DASHES AND THE DOT ARE ILLUMINATED WHITE : MANAGED SPEED SUCH AS V2 OR MEMORIZED VAPP ARE AUTOMATICALLY USED BY THE FMGS" },
+            { q: "THE FOLLOWING AP/FD LATERAL MODES ARE MANAGED :", options: ["NAV, HDG, APPR, LOC, RWY, RWY TRK", "HDG, NAV, APPR, LOC, GA TRK", "NAV, APPR NAV, LOC, RWY, RWY TRK, GA TRK, LAND, ROLL OUT"], answer: "NAV, APPR NAV, LOC, RWY, RWY TRK, GA TRK, LAND, ROLL OUT" },
+            { q: "ON GROUND, THE ENGAGEMENT OF THE AUTOTHRUST FUNCTION :", options: ["IS AUTOMATIC AT THE ENGAGEMENT OF THE TAKE OFF MODES OF THE FD(OR PROVIDED AT LEAST ONE FD IS ON)", "MUST BE CARRIED OUT MANUALLY BY THE CREW BEFORE TAKE OFF", "IS PERFORMED AUTOMATICALLY UPON THE SECOND ENGINE START"], answer: "IS AUTOMATIC AT THE ENGAGEMENT OF THE TAKE OFF MODES OF THE FD(OR PROVIDED AT LEAST ONE FD IS ON)" },
+            { q: "CLIMBS AND DESCENTS ARE ALWAYS RESTRICTED :", options: ["BY THE ALTITUDE MANUALLY SELECTED ON THE FCU", "BY THE AIRCRAFT WEIGHT CALCULATED BY THE FMGC", "BY FLIGHT PLAN (T/C) AND (T/D) POINTS"], answer: "BY THE ALTITUDE MANUALLY SELECTED ON THE FCU" },
+            { q: "Complete IRS alignment: ADIRS selector...............................................................OFF for ……..then NAV.", options: ["more than 5 s", "more than 10s", "within 5 s", "more than 6 s"], answer: "more than 5 s" },
+            { q: "Fast IRS alignment: ADIRS selector................................................. OFF then back to NAV ……….. s.", options: ["more than 5 s", "more than 10s", "within 5 s", "more than 6 s"], answer: "within 5 s" },
+            { q: "ENHANCED GROUND PROXIMITY WARNING SYSTEM (EGPWS) If the TERR ON ND is not selected, and a terrain alert is generated, the terrain is automatically displayed on the ND.", options: ["TRUE", "FALSE"], answer: "TRUE" },
+            { q: "THE LOUDSPEAKER ANNOUNCES “RETARD” AT … OR … IF AUTOTRUST IS ACTIVE AND ONE AP IS IN LAND MODE", options: ["20 feet or 10 feet", "20 feet or 5 feet", "50 feet or 10 feet", "100 feet"], answer: "20 feet or 10 feet" },
+            { q: "WINDSHEAR ALERTS ARE INHIBITED ABOVE … KNOT AND UP TO… FEET", options: ["100 knot 40 feet", "100 knot 50 feet", "50 knot 100 feet", "100 knot 100 feet"], answer: "100 knot 50 feet" },
+            { q: "FLAP MODE PUSHBUTTON \"OFF\" SELECTION INHIBITS \"TOO LOW FLAPS\" CAUTION", options: ["TRUE", "FALSE"], answer: "TRUE" },
+            { q: "ALL TA AURAL MESSAGES ARE INHIBITED BELOW 600 FT IN CLIMB AND BELOW 400 FT IN DESCENT.", options: ["TRUE", "FALSE"], answer: "TRUE" },
+            { q: "THE FWC GENERATES A SYNTHETIC VOICE FOR RADIO HEIGHT ANNOUNCEMENT BELOW;", options: ["2350 FT", "2500 FT", "1600 FT", "1000 FT"], answer: "2500 FT" }
+        ],
+        pneumatics: [
+            { q: "WITH ENGINES AND APU RUNNING AND APU BLEED VALVE SELECTED ON ,WHAT IS THE CORRECT STATEMENT: ", options: ["ENGINE BLEED VALVES CLOSE, X BLEED VALVE CLOSES, APU BLEED VALVE OPENS.", "ENGINE BLEED VALVES OPEN, X BLEED VALVE OPENS, APU BLEED VALVE CLOSES.", "ENGINE BLEED VALVES CLOSE, X BLEED VALVE OPENS, APU BLEED VALVE OPENS.", "ENGINE BLEED,VALVES OPEN ,X BLEED VALVE CLOSES, APU BLEED VALVE OPENS."], answer: "ENGINE BLEED VALVES CLOSE, X BLEED VALVE OPENS, APU BLEED VALVE OPENS." },
+            { q: "TO PROVIDE EXTERNAL AIR FOR ENGINE START THE FOLLOWING SWITCHING IS REQUIRED :", options: ["PNEUMATIC X BLEED AUTO.", "PNEUMATIC X BLEED OPEN.", "ENGINE BLEED SWITCHES ON.", "APU BLEED SWITCH OFF."], answer: "PNEUMATIC X BLEED OPEN." },
+            { q: "HIGH PRESSURE AIR IS SUPPLIED FROM : ", options: ["ENGINE 1 AND/OR 2 BLEED SYSTEMS, APU LOAD COMPRESSOR, HP GROUND CONNECTION.", "ENGINE 1 AND 2 BLEED SYSTEMS.", "ENGINE 1 AND 2 BLEED SYSTEM OR APU LOAD COMPRESSOR."], answer: "ENGINE 1 AND/OR 2 BLEED SYSTEMS, APU LOAD COMPRESSOR, HP GROUND CONNECTION." },
+            { q: "PNEUMATIC SYSTEM OPERATION IS CONTROLLED AND MONITORED BY :", options: ["ONE BLEED MONITORING COMPUTER.", "TWO BLEED VALVE COMPUTER.", "TWO BLEED MONITORING COMPUTERS."], answer: "TWO BLEED MONITORING COMPUTERS." },
+            { q: "WHICH SOURCE OPERATES THE BLEED VALVE ?", options: ["PNEUMATIC.", "ELECTRIC.", "BOTH."], answer: "PNEUMATIC." },
+            { q: "WHAT HAPPENS WHEN PRESSURE AND TEMPERATURE ARE NOT SUFFICIENT TO SUPPLY THE CORRESPONDING ENGINE BLEED VALVE.", options: ["IP VALVE CLOSED.", "HP VALVE OPENED, IP STAGE CLOSED.", "HP VALVE OPENED, IP STAGE REMAINS IN THE SAME CONFIGURATION."], answer: "HP VALVE OPENED, IP STAGE REMAINS IN THE SAME CONFIGURATION." },
+            { q: "CAN YOU CONTROL THE HP VALVE POSITION THROUGH THE AIR BLEED COCKPIT PANEL.", options: ["YES", "NO"], answer: "YES" },
+            { q: "IF THE BLEED VALVE CLOSES,THE HP VALVE:", options: ["OPENS AUTOMATICALLY.", "CLOSES AUTOMATICALLY."], answer: "CLOSES AUTOMATICALLY." },
+            { q: "IN CASE OF LOW UPSTREAM PRESSURE, THE HIGH PRESSURE VALVE ( HP VALVE ) IS :", options: ["PNEUMATICALLY CLOSED.", "OPEN.", "ELECTRICALLY OPENED.", "ELECTRICALLY CLOSED."], answer: "PNEUMATICALLY CLOSED." },
+            { q: "TEMPERATURE REGULATION IS ACHIEVED BY THE PRECOOLER WHICH REGULATES AND LIMITS THE TEMPERATURE AT : ", options: ["150 DEGREE.", "85 DEGREE.", "200 DEGREE."], answer: "200 DEGREE." },
+            { q: "BLEED AIR FROM THE ENGINES IS :", options: ["COOLED IN AIR TO AIR HEAT EXCHANGER BY USING COLD AIR BLEED FROM THE ENGINE FAN SECTION .", "NOT COOLED PRIOR TO BEING USED BY THE SYSTEMS.", "ONLY COOLED IN AIR CONDITIONING PART", "COOLED USING AMBIENT AIR."], answer: "COOLED IN AIR TO AIR HEAT EXCHANGER BY USING COLD AIR BLEED FROM THE ENGINE FAN SECTION ." },
+            { q: "WHICH SOURCE CONTROLS THE CROSSBLEED VALVE ?", options: ["PNEUMATIC.", "ELECTRIC."], answer: "ELECTRIC." },
+            { q: "THE CROSSBLEED VALVE IS PROVIDED WITH 2 ELECTRICAL MOTORS :", options: ["ONE FOR THE AUTOMATIC MODE , THE OTHER ONE FOR THE MANUAL MODE .", "TWO FOR THE AUTOMATIC MODE.", "TWO FOR THE MANUAL MODE."], answer: "ONE FOR THE AUTOMATIC MODE , THE OTHER ONE FOR THE MANUAL MODE ." },
+            { q: "Which of the statements is true about pneumatic leak detection system?", options: ["Leak detection loops detect any overheating near the hot air ducts in the fuselage.", "Leak detection loops detect any overheating near the pylons.", "Leak detection loops detect any overheating near the pylons and wings.", "Leak detection loops detect any overheating near the hot air ducts in the fuselage, pylons, and wings."], answer: "Leak detection loops detect any overheating near the hot air ducts in the fuselage, pylons, and wings." },
+            { q: "Which of the statement is true about pneumatic leak detection system?", options: ["When the two wing loops detect a leak they activate a wing leak signal.", "When one loop detects a leak regardles of the other it activates a wing leak signal.", "If one of the loops is inoperative than the other loops activates a wing leak signal.", "When the two wing loops detect a leak, or when one loop detects the leak and the other one is inoperative, they activate a wing leak signal."], answer: "When the two wing loops detect a leak, or when one loop detects the leak and the other one is inoperative, they activate a wing leak signal." },
+            { q: "A wing leak signal causes:", options: ["The bleed valve on the related side to close automatically, the associated FAULT light on the AIR COND panel to come on.", "The x-bleed valve to close atomatically (except during an engine start).", "The APU bleed valve to close automatically (if it is open, and if the leak concerns the left wing) (except during engine start).", "all of the above"], answer: "all of the above" },
+            { q: "If a leak is detected from the APU bleed; the APU bleed valve closes automatically even during engine start.", options: ["TRUE", "FALSE"], answer: "FALSE" },
+            { q: "An APU leak signal causes:", options: ["The APU bleed valve to close automatically, except during engine start.", "The APU bleed valve to close automatically.", "The x-bleed valve have to be manually closed if needed.", "The x-bleed valve closes automatically during engine start."], answer: "The APU bleed valve to close automatically, except during engine start." },
+            { q: "Which stage of bleed air is the normal supply to the pneumatic system?", options: ["HP (High Pressure)", "LP (Low Pressure)", "IP (Intermediate Pressure)"], answer: "IP (Intermediate Pressure)" },
+            { q: "With the X BLEED sw in AUTO, the Engine Bleed Valves will be _______ when the APU Bleed Valve is open.", options: ["Opened", "Half Opened", "Closed"], answer: "Closed" },
+            { q: "The Engine Bleed Valves are controlled by _______.", options: ["BMC (Bleed Air Monitoring Computer)", "Outflow Valve", "Vent Blower", "Mixing Unit"], answer: "BMC (Bleed Air Monitoring Computer)" },
+            { q: "If Ground Air is applied to the Pneumatic System, the X BLEED valve is opened _______.", options: ["Automatically", "Manually"], answer: "Manually" },
+            { q: "Choose one of the PNEUMATIC conditions that will cause an Engine Bleed Valve to close", options: ["There is no return air flow", "Over pressure", "A detected leak", "APU BLEED ON"], answer: "There is no return air flow" },
+            { q: "Select the ELECTRICAL condition that will cause the HP valve to close", options: ["When the Engine Bleed Valve has been electrically closed", "Low upstream pressure", "Excessive upstream pressure"], answer: "When the Engine Bleed Valve has been electrically closed" },
+            { q: "When the engine bleed valves are selected ON with both engines running, the X BLEED valve will _______, when the X BLEED sw is in AUTO.", options: ["Open", "Close"], answer: "Close" },
+            { q: "Choose one of the Electrical conditions that will cause an Engine Bleed Valve to close.", options: ["There is no return airflow", "Over pressure", "Pressure to the valve less than 8 psi"], answer: "Over pressure" },
+            { q: "The pneumatic system controls are located on the _______ . ", options: ["Air Conditioning Panel", "Electrical Panel", "Glareshield Panel"], answer: "Air Conditioning Panel" },
+            { q: "The pneumatic system can receive air from which of the following sources?", options: ["APU bleed air", "Engine bleed air", "External ground source", "All of these"], answer: "All of these" },
+            { q: "The normal supply of bleed air is from the _______ of the engine's _______ ?", options: ["High pressure stage; low pressure compressor", "Intermediate pressure stage; high pressure compressor"], answer: "Intermediate pressure stage; high pressure compressor" },
+            { q: "When external pneumatic air is used, the X BLEED selector should be in the _______ position", options: ["OPEN", "SHUT", "AUTO"], answer: "OPEN" },
+            { q: "On the ECAM page, valves that are operating normally are generally displayed in _______ .", options: ["AMBER", "GREEN", "RED", "BLUE"], answer: "GREEN" },
+            { q: "Each Engine Bleed Valve is _______ controlled and _______ operated.", options: ["Electrically, pneumatically", "Pneumatically, electrically"], answer: "Electrically, pneumatically" },
+            { q: "The pilot can view the position of the valves and system pressure supply on the _______ page. ", options: ["ECAM ENG", "ECAM HYD", "ECAM BLEED", "ECAM DOORS"], answer: "ECAM BLEED" },
+            { q: "If the APU Bleed Air or Ground Pneumatic source is powering the pneumatic system, the right pack is not powered unless the crossbleed valve is open.", options: ["True", "False"], answer: "True" },
+            { q: "Select the pneumatic condition that will cause the HP valve to close.", options: ["When the Engine Bleed Valve has been electrically closed", "When there is an overpressure upstream of the HP Valve with Wing Anti-ice off, two packs on and aircraft altitude above 15,000'", "Low upstream press"], answer: "Low upstream press" },
+            { q: "The aircraft is equipped with _______ Bleed Monitoring Computers (BMCs)", options: ["1", "2", "3", "4"], answer: "2" }
+        ],
+        power_plant: [
+            { q: "On ground, the start sequence is automatically aborted :", options: ["There is no automatic sequence", "Only in case of hot start or hung start", "Only in case of no light up", "In case of hot start, hung start, stall or no light up"], answer: "In case of hot start, hung start, stall or no light up" },
+            { q: "THE FADEC HAS TWO-CHANNEL REDUNDANCY, WITH ...", options: ["BOTH CHANNELS ACTIVE WHEN A/THR IS ARMED", "BOTH CHANNELS ACTIVE IN ENGINE STARTING SEQUENCE", "ONE CHANNEL IS ACTICE AND ONE IN STANDBY", "ONE CHANNEL IS ACTIVE WHEN A/THR IS SET TO ON"], answer: "ONE CHANNEL IS ACTICE AND ONE IN STANDBY" },
+            { q: "WHAT IS THE EGT LIMIT AT STARTING FOR A-320 AND A-321: ", options: ["890 ºC - 690 ºC", "790 ºC - 650 ºC", "725 ºC - 635 ºC"], answer: "725 ºC - 635 ºC" },
+            { q: "WHAT IS THE MINIMUM STARTING OIL TEMPERATURE:", options: ["-40 ºC", "-10 ºC", "0 ºC"], answer: "-40 ºC" },
+            { q: "ON GROUND THE AUTOMATIC START SEQUENCE IS :", options: ["START VALVE OPENS ,IGNITION STARTS WHEN N2 > 16 % LP AND HP FUEL VALVES OPEN WHEN N2 >22 % WHEN N2 > 50 %, START VALVE CLOSES AND IGNITER OFF", "START VALVE OPENS, IGNITION STARTS WHEN N2 > 16% WHEN N2 >50 %, START VALVE CLOSES AND IGNITER OFF", "START VALVE AND HP FUEL VALVE OPEN WHEN N2 > 22 %,START VALVE CLOSES WHEN N2 >50 %", "START VALVE OPENS , IGNITION STARTS WHEN N2 > 16 % LP AND HP FUEL VALVES OPEN WHEN N2 > 22 % WHEN ENGINE MODE SELECTOR IS SET TO NORM , START VALVE CLOSES AND IGNITER OFF"], answer: "START VALVE OPENS ,IGNITION STARTS WHEN N2 > 16 % LP AND HP FUEL VALVES OPEN WHEN N2 >22 % WHEN N2 > 50 %, START VALVE CLOSES AND IGNITER OFF" },
+            { q: "WHAT IS THE MINIMUM OIL QUANTITY (ECAM INDICATIONS):", options: ["10.5 QTS OR ABOVE + ESTIMATED CONSUMPTION (MAX 0.4 QTS/H)", "9.5 QTS OR ABOVE + ESTIMATED CONSUMPTION (MAX 0.5 QTS /H)", "11 QTS OR ABOVE + ESTIMATED CONSUMPTION (MAX 0.3 QTS /H)", "BOTH B AND C ARE CORRECT"], answer: "BOTH B AND C ARE CORRECT" },
+            { q: "WHAT IS THE MAXIMUM N2 :", options: ["106 %", "102 %", "100 %"], answer: "100 %" },
+            { q: "MAXIMUM REVERSE SHOULD NOT BE USED:", options: ["THERE IS NO LIMIT", "BELOW 70 KNOTS", "BELOW 40 KNOTS", "BELOW 50 KNOTS"], answer: "BELOW 70 KNOTS" },
+            { q: "WHAT IS THE MAXIMUM STARTER OPERATING TIME (A320)", options: ["3 CYCLES 4 MINUTES FOLLOWED BY 20 SECONDS OF PAUSE BETWEEN START ATTEMPTS", "3 CYCLES 2 MINUTES FOLLOWED BY 2 MINUTES OF PAUSE BETWEEN START ATTEMPTS", "2 CYCLES 2 MINUTES EACH,FOLLOWED BY 3RD CYCLE OF 1 MINUTE"], answer: "2 CYCLES 2 MINUTES EACH,FOLLOWED BY 3RD CYCLE OF 1 MINUTE" },
+            { q: "ENGINE IS CAPABLE OF STARTING IN CROSSWINDS UP TO:", options: ["35 KNOTS", "65 KNOTS", "30 KNOTS", "25 KNOTS"], answer: "35 KNOTS" },
+            { q: "IT IS NOT PERMITTED TO BACK UP THE AIRCRAFT WITH REVERSE THRUST:", options: ["TRUE", "FALSE", "40 KNOTS (IDLE REVERSE DOWN TO A/C STOP)"], answer: "TRUE" },
+            { q: "REDUCED THRUST IS NOT PERMITTED :", options: ["IF OUTSIDE AIR TEMP IS LOWER THAN CORRECTED TEMP", "ON CONTAMINATED RUNWAYS", "IF OUTSIDE AIR TEMP IS HIGHER THAN TREF (ISA +15 C)"], answer: "ON CONTAMINATED RUNWAYS" },
+            { q: "IN MANUAL THRUST, IN CRUISE, THE PILOT SHOULD LIMIT THE N1, WHAT IS THIS LIMIT ?", options: ["DISPLAYED MAX CLB N1, MINUS 2.4 %", "DISPLAYED MAX CLB N1", "DISPLAYED MCT N1"], answer: "DISPLAYED MAX CLB N1, MINUS 2.4 %" },
+            { q: "IS THE N1 CORRESPONDING TO MAX CRUISE LEVEL DISPLAYED ON UPPER ECAM ?", options: ["YES", "NO"], answer: "YES" },
+            { q: "TREF IS 29 ºC OUTSIDE AIR TEMP , IS 36 ºC AND YOU FOUND A CORRECTED FLEX TEMP OF 33 ºC IS IT POSSOBLE TO USE FLEX THRUST FOR TAKE-OFF:", options: ["YES", "NO"], answer: "NO" },
+            { q: "WHAT IS THE FADEC :", options: ["AN ENGINE CONTROL BOX", "A THRUST CONTROL UNIT", "THE ELECTRONIC CONTROL UNIT AND ITS PERIPHERAL SENSORS AND COMPONENTS"], answer: "THE ELECTRONIC CONTROL UNIT AND ITS PERIPHERAL SENSORS AND COMPONENTS" },
+            { q: "IN MANUAL THRUST MODE , WHEN THE THRUST LEVERS ARE POSITIONED BETWEEN IDLE AND TOGA POSITION : ", options: ["EACH POSITION OF THE LEVER WITHIN THESE LIMIT CORRESPONDING TO AN N1", "N1 VALUE IS CLIMB N1", "N1 VALUE IS IDLE N1"], answer: "EACH POSITION OF THE LEVER WITHIN THESE LIMIT CORRESPONDING TO AN N1" },
+            { q: "THE FADEC SYSTEM IS :", options: ["ALWAYS POWERED BY THE AC ELECTRICAL CIRCUIT .", "SELF POWERED.", "SELF POWERED ABOVE 12 % N2 WITH AC POWER WHEN N2 IS BELOW 12 %."], answer: "SELF POWERED ABOVE 12 % N2 WITH AC POWER WHEN N2 IS BELOW 12 %." },
+            { q: "WHAT DEVICE PROVIDES DIRECT CLOSURE OF THE HP SHUT-OFF VALVES :", options: ["THE MASTER SWITCH AT OFF POSITION", "THE ECU", "HMU", "FADEC"], answer: "THE MASTER SWITCH AT OFF POSITION" },
+            { q: "WHICH VALVE ENSURES AN ADEQUATE FUEL FLOW :", options: ["THE HP FUEL SHUT OFF VALVE.", "THE BURNER STAGING VALVE (BSV)", "THE FUEL METERING VALVE (FMV) OF THE HYDROMECHANICAL UNIT (HMU)"], answer: "THE FUEL METERING VALVE (FMV) OF THE HYDROMECHANICAL UNIT (HMU)" },
+            { q: "IS THE ENGINE STILL SUPPLIED IN CASE OF FUEL FILTER CLOG :", options: ["YES, BY USING THE FUEL COMING FROM THE IDG COOLING TANK LINE", "YES, BY BY-PASSING THE FUEL FILTER (BY-PASS VALVES)", "NO. THE ENGINE STOPS"], answer: "YES, BY BY-PASSING THE FUEL FILTER (BY-PASS VALVES)" },
+            { q: "CRANKING MAY BE MANUALLY SELECTED BY SETTING : ", options: ["THE ENG MODE SELECTOR TO CRANK AND THE MASTER SWITCH TO ON", "ENG MASTER SWITCH TO OFF, ENG MODE SELECTOR TO CRANK AND ENG MAN START PUSH BUTTON TO ON", "SAME AS B. WITH ENG MASTER SWITCH ON."], answer: "ENG MASTER SWITCH TO OFF, ENG MODE SELECTOR TO CRANK AND ENG MAN START PUSH BUTTON TO ON" },
+            { q: "DURING AN AUTOMATIC STARTING SEQUENCE, THE PACK VALVES CLOSE WHEN :", options: ["IGN/START IS SELECTED.", "APU BLEED IS SET TO ON AND IGN/START IS SELECTED.", "THE ENG MASTER SWITCH IS SET TO ON WITH IGN / START SELECTED."], answer: "IGN/START IS SELECTED." },
+            { q: "DURING AN AUTOMATIC STARTING SEQUENCE :", options: ["START VALVE CLOSES AT N2 > 43 %.", "START VALVE CLOSES AT N2 > 45 %.", "START VALVE CLOSES AT N2 > 50 %."], answer: "START VALVE CLOSES AT N2 > 50 %." },
+            { q: "THRUST REVERSERS ARE ACTUATED BY :", options: ["HYDRAULIC ACTUATORS:GREEN FOR ENGINE 1 - YELLOW FOR ENGINE 2", "HYDRAULIC ACTUATORS:GREEN FOR BOTH ENGINES", "HYDRAULIC ACTUATORS: BLUE FOR ENGINE 1 - YELLOW FOR ENGINE 2", "PNEUMATIC ACTUATORS"], answer: "HYDRAULIC ACTUATORS:GREEN FOR ENGINE 1 - YELLOW FOR ENGINE 2" },
+            { q: "MAXIMUM EGT DURING ENGINE START IS:", options: ["855 c", "890 c", "725 c"], answer: "725 c" },
+            { q: "THE FADEC AUTOMATICALLY SELECTS CONTINUOUS IGNITION IN THE FOLLOWING CASES :", options: ["WING ANTI -ICE OR ENGINE FLAME OUT", "IN FLIGHT RESTART, OR ENGINE FLAME OUT OR EIU FAILURE", "IN FLIGHT AUTOMATIC RESTART OR ENGINE FLAME OUT OR EIU FAILURE OR ENGINE ANTI - ICE ON"], answer: "IN FLIGHT AUTOMATIC RESTART OR ENGINE FLAME OUT OR EIU FAILURE OR ENGINE ANTI - ICE ON" },
+            { q: "HOW IS THE OIL COOLED?", options: ["BY THE SERVO FUEL HEATER OR BY AIR/OIL HEAT EXCHANGER", "BY OIL RECIRCULATION", "BY THE FUEL/OIL HEAT EXCHANGER", "BOTH A AND C ARE CORRECT"], answer: "BOTH A AND C ARE CORRECT" },
+            { q: "THE OIL PRESSURE INDICATOR BECOMES RED WHEN THE PRESSURE IS LOWER THAN :", options: ["13 PSI", "16 PSI", "60 PSI", "80 PSI"], answer: "60 PSI" },
+            { q: "THRUST FROM EXCEEDING THE LIMIT FOR THE THRUST LEVER POSITION IN BOTH MANUAL AND AUTOMATIC MODES BY ...", options: ["BY THE EPR (WITH THROTTLE LEVER POSITIONED (TLA))", "BY THE MODE ENGAGED ON THE FCU", "BY THE FMGS ITSELF", "BY FADEC"], answer: "BY FADEC" },
+            { q: "THE THRUST REVERSER DEPLOYMENT CONDITIONS ARE:", options: ["ONE FADEC CHANNEL OPERATING WITH ITS THRUST REVERSE SIGNAL", "RIGHT AND LEFT MAIN GEAR COMPRESSED", "TLA REVERSE SIGNAL FROM AT LEAST ONE SEC (SPOILER ELEVATOR COMPUTER)", "ALL ARE REQUIRED"], answer: "ALL ARE REQUIRED" },
+            { q: "REV APPEARS IN GREEN ON THE N1 INDICATOR WHEN :", options: ["THE THRUST LEVERS ARE SET TO FULL REVERSE SECTOR", "THE REVERSE COWLS OR BLOCKER DOORS ARE FULLY DEPLOYED", "THE THRUST LEVER POSITION IS IN THE IDLE REVERSE SECTOR"], answer: "THE REVERSE COWLS OR BLOCKER DOORS ARE FULLY DEPLOYED" },
+            { q: "REVERSE DEPLOYMENT REQUIRES A TLA SIGNAL FROM THE SEC 's .ONE REVERSE WILL BE LOST IF :", options: ["SEC' s 1+2 ARE LOST", "SEC 's 1+3 ARE LOST", "A OR B"], answer: "A OR B" },
+            { q: "WHICH STATEMENT SHOWN BELOW IS CORRECT?", options: ["A CHANGE IN FLEX TEMP DURING THE TAKEOFF HAS NO EFFECT ON THE THRUST", "A CHANGE IN FLEX TEMP DURING THE TAKEOFF HAS REQUIRED EFFECT ON THE THRUST", "BOTH A AND B ARE CORRECT DEPENDING ON THE CONDITION"], answer: "A CHANGE IN FLEX TEMP DURING THE TAKEOFF HAS NO EFFECT ON THE THRUST" },
+            { q: "THERE IS NO REVERSE IDLE DETENT. WHEN THE PILOT MOVES THE LEVER OUT OF IDLE STOP BY PULLING UP THE REVERSE LEVER ON FRONT OF THE THRUST LEVER, HE SELECTS REVERSE IDLE.", options: ["TRUE", "FALSE. ALL REVERSES IN AIRBUS FAMILY HAS IDLE DETENT"], answer: "TRUE" },
+            { q: "AT TAKE OFF, AS SOON AS THE POWER IS SET (FLEX OR TOGA )", options: ["THE ATS FUNCTION IS ARMED PROVIDED THE A/THR PUSH BUTTON ON FCU IS PRESSED IN", "THE ATS FUNCTION IS ACTIVE", "THE ATS FUNCTION IS ARMED BUT NOT ACTIVE"], answer: "THE ATS FUNCTION IS ARMED BUT NOT ACTIVE" },
+            { q: "AFTER A FLEX TAKE OFF, YOU HAVE AN ENGINE FAILURE AND YOU WANT TO SELECT MCT :", options: ["HAVE THE THROTTHE LEVER IN FLX: MCT SELECTION IS AUTOMATIC", "TAKE THE THROTTLE LEVERS OUT THE FLX/MCT DETENT THEN BACK TO FLX /MCT POSITION"], answer: "TAKE THE THROTTLE LEVERS OUT THE FLX/MCT DETENT THEN BACK TO FLX /MCT POSITION" },
+            { q: "PRESSING THE ENG FIRE PB SWITCH( ON THE ENG FIRE PANEL ) CAUSES THE CLOSURE OF :", options: ["THE LP FUEL SHUT OFF VALVE", "THE FUEL LP VALVE AND THE HP VALVE (DUE TO LP VALVE CLOSURE)", "THE FUEL HP VALVE"], answer: "THE LP FUEL SHUT OFF VALVE" },
+            { q: "LVR ASYM APPEARS IN AMBER MESSAGE(3RD LINE ON THE FMA) MEANS:", options: ["IF, WITH A/THR ACTIVE AND BOTH ENGINES RUNNING, ONE THRUST IS SET OUT OF THE CLB", "ASYMETRIC POWER IS ESTABLISHED DUE TO FADEC MALFUNCTION", "ASYMETRIC POWER IS ESTABLISHED DUE TO TLA RESOLVER FAULT"], answer: "IF, WITH A/THR ACTIVE AND BOTH ENGINES RUNNING, ONE THRUST IS SET OUT OF THE CLB" },
+            { q: "LVR MCT FLASHING WHITE MESSAGE (3RD LINE ON THE FMA ) MEANS :", options: ["THRUST LEVERS ARE NOT IN MCT POSITION AFTER ENGINE FAILURE IN FLIGHT (WITH SPEED V2+10)", "THRUST LEVERS ARE NOT IN MCT POSITION AFTER ENGINE FAILURE (WITH SPEED IS > GREEN DOT )"], answer: "THRUST LEVERS ARE NOT IN MCT POSITION AFTER ENGINE FAILURE (WITH SPEED IS > GREEN DOT )" },
+            { q: "LVR CLB FLASHES WHITE (3RD LINE ON THE FMA) IF THE THRUST LEVERS ARE NOT IN CL POSITION WHEN :", options: ["THE AC IS ABOVE THE ALTITUDE OF THRUST REDUCTION WITH BOTH ENGINES RUNNING", "THE A/C IS NOT IN THE TAKEOFF POSITION", "THE LANDING GEAR IS RETRACTED"], answer: "THE AC IS ABOVE THE ALTITUDE OF THRUST REDUCTION WITH BOTH ENGINES RUNNING" },
+            { q: "What is the maximum motoring speed for N2?", options: ["Min. 15% for CFM, min %15 for IAE", "Min. 10% for CFM, min %20 for IAE", "Min. 20% for CFM, min %15 for IAE"], answer: "Min. 20% for CFM, min %15 for IAE" },
+            { q: "FADEC performs?", options: ["Monitoring of EGT during engine start", "Computation of thrust parameter limits", "Actuation of the thrust reverser blocker doors", "All of the above"], answer: "All of the above" },
+            { q: "FADEC system is self powered above:", options: ["12% N2 for CFM, 10% N2 for IAE", "12% N2 for CFM, 15% N2 for IAE", "10% N2 for CFM, 12% N2 for IAE", "10% N2 for CFM, 10% N2 for IAE"], answer: "10% N2 for CFM, 12% N2 for IAE" },
+            { q: "What happens if pilots select a flex takeoff temp. on the MCDU that is lower than the current TAT?", options: ["Engine produces TOGA thrust", "Engine produces FLEX takeoff thrust", "Engine produces MCT thrust", "None of the above"], answer: "Engine produces MCT thrust" },
+            { q: "What is the meaning of LVR ASYM?", options: ["the thrust levers are not in MCT position after an engine failure", "with A/THR active and both engines running, one thrust lever is set out of the CLB detent.", "the thrust levers are not in CL position while the aircraft is above the altitude of thrust reduction with both engines running", "None of the above"], answer: "with A/THR active and both engines running, one thrust lever is set out of the CLB detent." },
+            { q: "When no EPR is available FADEC will automatically reverts to N1 mode. Which one of the following statements is wrong about this situation?", options: ["At the reversion to N1 mode (rated or degraded) an equivalent thrust to that achieved in EPR mode is provided", "FADEC will revert to only rated mode", "A/THR control is lost", "Alpha floor protections is lost"], answer: "FADEC will revert to only rated mode" },
+            { q: "Which one of the following indications is available in degraded N1 mode?", options: ["N1 rating limit", "N1 TLA", "Max. N1 indication", "None of the above"], answer: "None of the above" },
+            { q: "If the thrust lever is set in a detent, the FADEC selects the rating limit corresponding to this detent.", options: ["True", "False"], answer: "True" },
+            { q: "Which one of the following statements is true about the approach idle?", options: ["It is selected in flight when the flaps are extended", "It is selected in flight when the slats are extended", "It is selected in flight when the flaps are retracted", "It is selected in flight when the slats are retracted"], answer: "It is selected in flight when the flaps are extended" },
+            { q: "How does FADEC alternates the use of igniters(CFM)?", options: ["Channel A igniter A, channel A igniter B, Channel B igniter A, channel B igniter B", "Channel A igniter A, channel B igniter A, Channel A igniter B, channel B igniter B", "Igniter A, igniter B, igniter B, igniter A", "Igniter A, igniter B, igniter A, igniter B"], answer: "Channel A igniter A, channel B igniter A, Channel A igniter B, channel B igniter B" },
+            { q: "Which one of the following conditions is not required for automatic selection of continuous ignition(IAE)?", options: ["When Eng A/Ice pb is pushed", "When Flex TO thrust selected", "When approach idle selected", "When slats are extended on ground"], answer: "When slats are extended on ground" },
+            { q: "What should be the minimum oil temperature prior to takeoff?", options: ["40°", "50°", "55°", "60°"], answer: "50°" },
+            { q: "What should be the minimum oil pressure?", options: ["30 psi", "40 psi", "50 psi", "60°psi"], answer: "60°psi" },
+            { q: "During preliminary cockpit preparation which one of the following calculation is performed for oil quantity check (IAE)?", options: ["11 qt + 0,5qt/h", "9,5 qt + 0,5qt/h", "11 qt + 0,3qt/h", "9,5 qt + 0,3 qt/h"], answer: "11 qt + 0,3qt/h" },
+            { q: "What is the crosswind limit for engine start?", options: ["25 kt", "35 kt", "38 kt", "45 kt"], answer: "35 kt" },
+            { q: "What is the EGT limit for engine start(IAE)?", options: ["610 °", "635 °", "650 °", "725 °"], answer: "635 °" },
+            { q: "During engine start with residual EGT > 250 °C, an auto-crank function motors the engine until EGT decreases below 250 °C.", options: ["True", "False"], answer: "True" },
+            { q: "After second engine start, takeoff can be performed in 3 minutes in any case(IAE).", options: ["True", "False"], answer: "False" },
+            { q: "During crossbleed engine start what should be the engine bleed pressure before start initiation(IAE)?", options: ["15 psi", "20 psi", "25 psi", "30 psi"], answer: "30 psi" },
+            { q: "What is the maximum landing capability when degraded N1 mode is active due to EPR MODE FAULT(no other failures)?", options: ["CAT 1", "CAT 2", "CAT 3 SINGLE", "CAT 3 DUAL"], answer: "CAT 2" },
+            { q: "After an engine failure if ENG 2 FIRE pushbutton is pushed, it is not allowed to use APU bleed.", options: ["True", "False"], answer: "False" },
+            { q: "If EGT exceeds 635°, a red mark appears at its maximum value and it disappears after landing.", options: ["True", "False"], answer: "False" },
+            { q: "ENG 1(2) EGT OVER LIMIT caution is not inhibited during takeoff and landing roll.", options: ["True", "False"], answer: "False" },
+            { q: "Aircraft can not be dispatched with FADEC channel A(B) failure.", options: ["True", "False"], answer: "True" },
+            { q: "During engine start when do pack valves close?", options: ["ENG mode selector is set to IGN", "ENG Master sw is ON", "When reaching maximum motoring speed", "When N2 is more than %43"], answer: "ENG mode selector is set to IGN" },
+            { q: "A/THR engagement is confirmed when “A/THR” is displayed in blue in the right column of the FMA?", options: ["True", "False"], answer: "False" },
+            { q: "What happens if an A/THR disconnect switch is pushed and held for more than 15 seconds?", options: ["The A/THR system is disconnected for the remainder of the flight", "Alpha floor function is lost", "CAT 3 capability is no more available", "All of the above"], answer: "All of the above" },
+            { q: "Which one of the followings is not a thrust lever detent?", options: ["TOGA", "FLX/MCT", "REV IDLE", "REV MAX"], answer: "REV IDLE" },
+            { q: "A/THR is active between idle and MCT detents in any case.", options: ["True", "False"], answer: "False" },
+            { q: "During manual engine start, which igniter(s) should appear?", options: ["A", "B", "AB", "A then B"], answer: "AB" },
+            { q: "With the A/THR is active and speed is managed, what is the minimum speed which the aircraft will maintain in clean configuration?", options: ["VLS", "Green dot", "Speed constraint", "Speed limit"], answer: "Green dot" },
+            { q: "How can you recognize an engine flame-out", options: ["A rapid increase in EGT and N1 , decrease in N2 and FF", "A decrease in EGT and N2 and increase in N1 and FF", "An increase in N2 and N1 and decrease in EGT and FF", "rapid decrease in EGT, N2, FF, followed by decrease in N1"], answer: "rapid decrease in EGT, N2, FF, followed by decrease in N1" },
+            { q: "Engine damage may be accompanied by: ‐ Loud noise, ‐ Significant increase in aircraft vibrations and/or buffeting, ‐ Repeated or uncontrollable engine stalls, ‐ Associated abnormal indications such as hydraulic fluid loss, or no N2 indication.", options: ["True", "False"], answer: "True" },
+            { q: "What are the engine oil high temperature parameters?", options: ["Oil temp between 140 °C and 155 °C for more than 15 min, or oil temp above 155 °C", "Oil temp between 120 °C and 150 °C for more than 15 min, or oil temp above 160 °C", "Oil temp between 130 °C and 145 °C for more than 15 min, or oil temp above 145 °C", "Oil temp between 140 °C and 175 °C for more than 15 min, or oil temp above 175 °C"], answer: "Oil temp between 140 °C and 155 °C for more than 15 min, or oil temp above 155 °C" },
+            { q: "A stall may be indicated by varying degrees of abnormal engine noises, accompanied by flame from the engine exhaust (and possibly from the engine inlet in severe case),fluctuating performance parameters, sluggish or no throttle response, high EGT and/or a rapid EGT rise when thrust lever is advanced.", options: ["True", "False"], answer: "True" },
+            { q: "On ground (manual start): ENG MASTER (AFFECTED)... OFF; MAN START (AFFECTED)... OFF; MODE SEL... CRANK; MAN START (AFFECTED)... ON. ECAM does not display the (_____) lines of the above procedure. Dry crank the engine for (____) s. The start valve automatically reopens when N2 is below (____) %.", options: ["Last , 30 , 12", "Last two, 20 , 15", "Last two , 30 , 10", "Last , 20 , 10"], answer: "Last two , 30 , 10" },
+            { q: "What is the optimum relight speed for engine dual failure ?", options: ["300 kt", "320 kt", "280 kt", "285 kt"], answer: "280 kt" }
+        ],
+        special_airspace: [],
+        initial_low_vis: [],
+        pbn: [],
+        performance: [],
+        efis: [],
+        sop_english: [],
+        sop_normal: []
+    };
+
+    const courseNames = {
+        apu: "⚙️ APU", communication: "📻 Communication", doors: "🚪 Doors",
+        flight_controls: "✈️ Flight Controls", fire_protection: "🔥 Fire Protection",
+        fuel: "⛽ Fuel", ice_and_rain: "❄️ Ice and Rain", indication: "🖥️ Indication",
+        landing_gear: "🛬 Landing Gear", lights: "💡 Lights", oxygen: "🤿 Oxygen & Emerg.",
+        instruments: "🎛️ Instruments",
+        air_condition: "🌬️ Air Cond. & Press.", auto_flight: "🤖 Auto Flight",
+        efis: "📺 EFIS", electrics: "⚡ Electrics", fmgs: "🧭 FMGS – Navigation",
+        special_airspace: "🛩️ Special Airspace", initial_low_vis: "🌫️ Initial Low Vis.",
+        pbn: "🛰️ PBN", performance: "📈 Performance", pneumatics: "💨 Pneumatics",
+        power_plant: "🔥 Power Plant", sop_english: "📘 SOP English", sop_normal: "📗 SOP – Normal Usuller"
+    };
+
+    const mistakeTabNames = {
+        apu: "APU", communication: "COMM.", doors: "DOORS", flight_controls: "FLT. CONT.",
+        fire_protection: "FIRE PROT.", fuel: "FUEL", ice_and_rain: "ICE&RAIN",
+        indication: "IND.", landing_gear: "LDG GEAR", lights: "LIGHTS",
+        oxygen: "OXY.", instruments: "INST.",
+        air_condition: "AIR COND", auto_flight: "AUTO FLT", efis: "EFIS",
+        electrics: "ELEC", fmgs: "FMGS", special_airspace: "SPC AIR",
+        initial_low_vis: "LOW VIS", pbn: "PBN", performance: "PERF",
+        pneumatics: "PNEU", power_plant: "PWR PLNT", sop_english: "SOP ENG", sop_normal: "SOP NRM"
+    };
+
+    const examGroups = {
+        exam12: ['apu', 'communication', 'doors', 'flight_controls', 'fire_protection', 'fuel', 'ice_and_rain', 'indication', 'landing_gear', 'lights', 'oxygen', 'instruments'],
+        exam3: ['air_condition', 'auto_flight', 'electrics', 'fmgs', 'pneumatics', 'power_plant'],
+        extra: ['efis', 'special_airspace', 'initial_low_vis', 'pbn', 'performance', 'sop_english', 'sop_normal']
     };
 
     // --- SİSTEM MANTIĞI ---
@@ -828,8 +1213,7 @@
         if (savedUser) {
             currentUser = savedUser;
             updateUserInfo();
-            showPage('page-menu');
-            renderMistakeMenu();
+            showPage('page-main-menu');
         } else {
             showPage('page-login');
         }
@@ -858,27 +1242,21 @@
 
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        
         const pageEl = document.getElementById(id);
         if (pageEl) pageEl.classList.add('active');
-        else console.error("HATA: HTML içinde '" + id + "' id'sine sahip bir div bulunamadı!");
         
         const infoPanel = document.getElementById('user-info-panel');
         if (infoPanel) {
-            if (id === 'page-menu' || id === 'page-result') {
+            if (id === 'page-main-menu' || id === 'page-menu' || id === 'page-result') {
                 infoPanel.style.display = 'flex';
             } else {
                 infoPanel.style.display = 'none';
             }
         }
 
-        if(id === 'page-menu') {
-            renderMistakeMenu(); 
-            
+        if(id === 'page-main-menu') {
             let db = getDB();
-            let totalAttempts = 0;
-            let totalCorrect = 0;
-
+            let totalAttempts = 0, totalCorrect = 0;
             if (db[currentUser] && db[currentUser].stats) {
                 Object.values(db[currentUser].stats).forEach(stat => {
                     totalAttempts += stat.total;
@@ -887,18 +1265,43 @@
                 db[currentUser].totalSolved = totalAttempts;
                 saveDB(db);
             }
-            
-            let successRate = 0;
-            if (totalAttempts > 0) {
-                successRate = Math.round((totalCorrect / totalAttempts) * 100);
-            }
-
+            let successRate = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
             const totalEl = document.getElementById('total-solved-display');
             const rateEl = document.getElementById('success-rate-display');
-            
             if(totalEl) totalEl.textContent = totalAttempts;
             if(rateEl) rateEl.textContent = `%${successRate}`;
+        } else if (id === 'page-menu') {
+            renderMistakeMenu();
         }
+    }
+
+    function openExam(examId) {
+        currentExamCategory = examId;
+        currentTab = 'all';
+
+        document.getElementById('exam-title').textContent = (examId === 'exam12') ? "Exam I-II" : (examId === 'exam3') ? "Exam III" : "Ekstra";
+
+        const grid = document.getElementById('dersler-menusu');
+        grid.innerHTML = '';
+        examGroups[examId].forEach(key => {
+            const btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.innerHTML = courseNames[key];
+            btn.onclick = () => startQuiz(key);
+            grid.appendChild(btn);
+        });
+
+        const tabs = document.getElementById('hata-sekmeleri');
+        tabs.innerHTML = `<div class="stat-tab active" onclick="switchMistakeTab('all', this)">GENEL</div>`;
+        examGroups[examId].forEach(key => {
+            const tab = document.createElement('div');
+            tab.className = 'stat-tab';
+            tab.textContent = mistakeTabNames[key];
+            tab.onclick = function() { switchMistakeTab(key, this); };
+            tabs.appendChild(tab);
+        });
+
+        showPage('page-menu');
     }
 
     function updateUserInfo() {
@@ -915,7 +1318,7 @@
         currentUser = val;
         localStorage.setItem('sinav_user_v1', val);
         updateUserInfo();
-        showPage('page-menu');
+        showPage('page-main-menu');
     }
 
     function logout() {
@@ -969,7 +1372,11 @@
         let critical = [], warning = [], info = [];
 
         Object.values(stats).forEach(item => {
-            if (currentTab !== 'all' && item.category !== currentTab) return;
+            if (currentTab === 'all') {
+                if (!examGroups[currentExamCategory].includes(item.category)) return;
+            } else {
+                if (item.category !== currentTab) return;
+            }
 
             if(item.wrong > 0) {
                 let rate = (item.correct / item.total) * 100;
@@ -996,18 +1403,18 @@
 
         if (type === 'mix') {
             titleText = "🔀 Karışık Test";
-            for (let key in courseData) {
+            examGroups[currentExamCategory].forEach(key => {
                 sourceData.push(...courseData[key]);
-            }
+            });
         } else if (courseData[type]) {
-            titleText = "📚 " + type.charAt(0).toUpperCase() + type.slice(1) + " Testi";
+            titleText = "📚 " + courseNames[type];
             sourceData = courseData[type];
         }
 
         document.getElementById('quiz-title').textContent = titleText;
         currentQuizTitle = titleText;
 
-        if (!sourceData || sourceData.length === 0) return alert("Soru bulunamadı.");
+        if (!sourceData || sourceData.length === 0) return alert("Bu ders için henüz soru eklenmemiş.");
         
         currentPool = sourceData.map(q => {
             let newQ = { ...q };
@@ -1035,7 +1442,11 @@
         
         if (stats) {
             Object.values(stats).forEach(item => {
-                if (currentTab !== 'all' && item.category !== currentTab) return;
+                if (currentTab === 'all') {
+                    if (!examGroups[currentExamCategory].includes(item.category)) return;
+                } else {
+                    if (item.category !== currentTab) return;
+                }
 
                 if(item.wrong > 0) {
                     let rate = (item.correct / item.total) * 100;
